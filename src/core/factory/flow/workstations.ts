@@ -1,6 +1,6 @@
 import { Robot } from "@/core/robot";
 import Factory from "../factory";
-import { IfFlowRobot, IIFFlowState } from "./sub-flows";
+import { IfFlowRobot, IIFFlowState } from "./flow";
 
 export class WorkStation {
   constructor(public robot: Robot) {}

@@ -1,6 +1,6 @@
 {
   "name": "factory-flow",
-  "version": "0.1.0",
+  "version": "0.1.6",
   "description": "",
   "type": "module",
   "scripts": {
@@ -38,15 +38,47 @@
     "./services/*": "./dist/services/*/index.js",
     "./package.json": "./package.json"
   },
+  "typesVersions": {
+    "*": {
+      ".": [
+        "dist/index.d.ts"
+      ],
+      "core": [
+        "dist/core/index.d.ts"
+      ],
+      "core/*": [
+        "dist/core/*"
+      ],
+      "modules": [
+        "dist/modules/index.d.ts"
+      ],
+      "modules/*": [
+        "dist/modules/*"
+      ],
+      "utils": [
+        "dist/utils/index.d.ts"
+      ],
+      "utils/*": [
+        "dist/utils/*"
+      ],
+      "services": [
+        "dist/services/index.d.ts"
+      ],
+      "services/*": [
+        "dist/services/*"
+      ]
+    }
+  },
   "dependencies": {
     "chalk": "^5.3.0",
-    "jsonwebtoken": "^9.0.2",
-    "jsdom": "^25.0.1"
+    "jsdom": "^25.0.1",
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.7",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.10.1",
+    "tsc-alias": "^1.8.10",
     "typescript": "^5.7.2"
   },
   "engines": {

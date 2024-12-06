@@ -2,8 +2,7 @@ import { LogModule } from "@/modules/log";
 import EventEmitter from "node:events";
 
 import { FactoryState } from "@/core/state";
-import FactoryFlow from "./flow/flow";
-import { WorkStation } from "./flow/workstations";
+import { FactoryFlow, WorkStation } from "./flow";
 
 const EXECUTION_STOPPED = "EXECUTION_STOPPED";
 
