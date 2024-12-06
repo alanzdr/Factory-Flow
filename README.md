@@ -47,6 +47,7 @@ The `Robot` have no knowledge of the `Robot` that came before, nor of what came 
 
 the `Robot` that fetches the images data from the database, there is no need to have the function of downloading images, or optimizing them, each function will be used by a different `Robot`. The `Robot` that downloads the images only knows that it has a list of URLs in the state, and needs to download the images from that URL, while the one that optimizes, knows that there are images in a folder, and that it needs to optimize the heavy ones.
 
+<br />
 
 ### 2. Keep the state updated
 
