@@ -7,9 +7,21 @@
     "build": "tsc && tsc-alias",
     "dev": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alanzdr/factory.git"
+  },
+  "author": {
+    "name": "Alanderson Zelindro da Rosa",
+    "url": "https://github.com/alanzdr"
+  },
+  "maintainers": [
+    {
+      "name": "Alanderson Zelindro da Rosa",
+      "url": "https://github.com/alanzdr"
+    }
+  ],
+  "license": "MIT",
   "main": "dist/index.js",
   "files": [
     "dist"
@@ -36,5 +48,9 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.10.1",
     "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18.0.0 <=22.x.x",
+    "npm": ">=6.0.0"
   }
 }
