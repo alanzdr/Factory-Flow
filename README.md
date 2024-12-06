@@ -27,8 +27,8 @@ With this in mind, I developed this tool, thinking about two main principles.
 
 <p align="center">
   <img 
-    src=".github/console-2.png" 
-    width="400" 
+    src=".github/console-1.png" 
+    width="600" 
     alt="Factory Flow Logs"
   >
 </p>
