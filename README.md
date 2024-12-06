@@ -25,6 +25,14 @@ Doing this script from the beginning can bring some challenges, such as the time
 
 With this in mind, I developed this tool, thinking about two main principles.
 
+<p align="center">
+  <img 
+    src=".github/console-2.png" 
+    width="400" 
+    alt="Factory Flow Logs"
+  >
+</p>
+
 <br />
 
 ## :anchor: Principles
@@ -378,8 +386,14 @@ class LogRobot extends Robot {
 
 ```
 
+<br />
+<b>Result:</b>
 <p align="center">
-  <img src=".github/logs-2.png" width="600" alt="Factory Flow Logs">
+  <img 
+    src=".github/console-2.png" 
+    width="400" 
+    alt="Factory Flow Logs"
+  >
 </p>
 
 <br />
