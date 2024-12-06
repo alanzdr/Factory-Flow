@@ -62,6 +62,8 @@ Keeping the state updated, it is possible to temporarily remove a `Robot` from t
 
 If the `Robot` that downloads the images has already downloaded the image, it will not download them again, it will only download the images that are not in the state.
 
+<br />
+
 ## :hammer: Usage
 
 ### 1. Install the package
