@@ -386,7 +386,6 @@ class LogRobot extends Robot {
 
 ```
 
-<br />
 <b>Result:</b>
 <p align="center">
   <img 
