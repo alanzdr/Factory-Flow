@@ -379,7 +379,7 @@ class LogRobot extends Robot {
 ```
 
 <p align="center">
-  <img src=".github/logs.png" width="600" alt="Factory Flow Logs">
+  <img src=".github/logs-2.png" width="600" alt="Factory Flow Logs">
 </p>
 
 <br />
