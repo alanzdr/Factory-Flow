@@ -1,0 +1,40 @@
+{
+  "name": "factory",
+  "version": "0.1.0",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && tsc-alias",
+    "dev": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": "./dist/index.js",
+    "./core": "./dist/core/index.js",
+    "./core/*": "./dist/core/*/index.js",
+    "./modules": "./dist/modules/index.js",
+    "./modules/*": "./dist/modules/*/index.js",
+    "./utils": "./dist/utils/index.js",
+    "./utils/*": "./dist/utils/*/index.js",
+    "./services": "./dist/services/index.js",
+    "./services/*": "./dist/services/*/index.js",
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "jsonwebtoken": "^9.0.2",
+    "jsdom": "^25.0.1"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^21.1.7",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "^22.10.1",
+    "typescript": "^5.7.2"
+  }
+}
