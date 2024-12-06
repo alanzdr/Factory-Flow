@@ -1,6 +1,6 @@
 
 
-<h1 align="center">Factory</h1>
+<h1 align="center">Factory Flow</h1>
 
 <p align="center">
   <a href="#memo-license">License</a>
