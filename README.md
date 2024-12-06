@@ -23,7 +23,7 @@ Imagine a scenario where you need to run a script that goes through a image data
 
 Doing this script from the beginning can bring some challenges, such as the time it takes to execute each step of the process, or if an error occurs in the middle, you may need to run it from the beginning again.
 
-With this in mind, I developed this tool, thinking about two main principles.
+<br />
 
 <p align="center">
   <img 
@@ -33,7 +33,8 @@ With this in mind, I developed this tool, thinking about two main principles.
   >
 </p>
 
-<br />
+With this in mind, I developed this tool, thinking about two main principles.
+
 
 ## :anchor: Principles
 
