@@ -8,10 +8,11 @@ import {
   LoopWorkStation,
   IfWorkStation,
 } from "./workstations";
-import Factory from "../factory";
+import { Factory } from "@/core/factory";
+import { FactoryState } from "@/core/state";
 import { ConditionFunction } from "./types";
 
-class FactoryFlow<State extends object = any> {
+class FactoryFlow<State extends FactoryState = FactoryState> {
   protected stations: WorkStation[];
 
   constructor(
@@ -112,22 +113,22 @@ class FactoryFlow<State extends object = any> {
     return this;
   }
 
-  public execute() {
-    this.factory
-      .runStations(this.stations)
-      .then(() => {
-        this.factory.log.processInfo("Factory execution completed");
-      })
-      .catch((error) => {
-        this.factory.log.error("Error while running factory");
-        this.factory.log.error(error);
-      });
+  public async execute() {
+    try {
+      await this.factory.runStations(this.stations);
+      this.factory.log.processInfo("Factory execution completed");
+    } catch (error) {
+      this.factory.log.error("Error while running factory");
+      this.factory.log.error(error);
+    }
+    return this.factory;
   }
 }
 
 export class SubFactoryFlow extends FactoryFlow {
-  public override execute(): void {
+  public override async execute() {
     throw new Error("Sub factory flow cannot be executed");
+    return this.factory;
   }
 }
 

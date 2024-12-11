@@ -109,6 +109,10 @@ class FetchImagesRobot extends Robot {
     const images: string[] = [];
     // ... your code to get the images here
     this.state.set("images", images);
+    // OR
+    this.state.set("images", (oldImages) => {
+      return [...oldImages, ...images];
+    });
   }
 }
 
@@ -215,7 +219,28 @@ const state = new CustomState(initialState);
 export default state;
 ```
 
-### 4. Create and Execute the Factory Flow
+### 4. make your robots know the State
+
+Pass the State Class as the first Generic when extending the Robot, now when you call `this.state` inside the robot, it will be typed with the state you passed.
+
+```ts
+// robots/fetchImages.ts
+import CustomState from '../state';
+import { Robot } from "factory-flow/core";
+
+class FetchImagesRobot extends Robot<CustomState> {
+  async execute(): Promise<void> {
+    // return the type that was declared in the state, in this case, string[]
+    const images = this.state.get("images");
+    // ... your code to get the images here
+    this.state.set("images", images);
+  }
+}
+
+export default FetchImagesRobot;
+```
+
+### 5. Create and Execute the Factory Flow
 
 - Create the factory flow, and add the robots to the factory, the factory will be responsible for executing the robots in the correct order.
 - Here you can add as if they were blocks, and you can always remove or add a new `Robot` in any position.
@@ -229,10 +254,23 @@ import FetchImagesRobot from "./robots/fetchImages";
 import DownloadImagesRobot from "./robots/downloadImages";
 import state from "./state";
 
+// Create and execute the factory flow
 Factory.createFlow(state)
   .pipe(FetchImagesRobot)
   .pipe(DownloadImagesRobot)
   .execute();
+
+// OR
+
+async function runImageDownloadFactory() {
+  const factory = await Factory
+    .createFlow(state)
+    .pipe(FetchImagesRobot)
+    .pipe(DownloadImagesRobot)
+    .execute();
+  // You can access the state after the execution
+  console.log(factory.state.get("downloaded"));
+}
 
 ```
 
@@ -320,12 +358,13 @@ You can pass settings to the robots, to do this, just pass the settings as the s
 
 ```ts
 // In the Robot
+import CustomState from '../state';
 
 interface Settings {
   limit: number;
 }
 
-class FetchImagesRobot extends Robot<Settings> {
+class FetchImagesRobot extends Robot<CustomState, Settings> {
   private limit: number;
 
   // The settings are passed as the second parameter

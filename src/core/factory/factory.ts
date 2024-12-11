@@ -2,16 +2,19 @@ import { LogModule } from "@/modules/log";
 import EventEmitter from "node:events";
 
 import { FactoryState } from "@/core/state";
-import { FactoryFlow, WorkStation } from "./flow";
+import { FactoryFlow, WorkStation } from "@/core/flow";
+import { FactoryModules } from "@/core/modules";
 
 const EXECUTION_STOPPED = "EXECUTION_STOPPED";
 
-class Factory<State extends object = any> {
+class Factory<State extends FactoryState = FactoryState> {
   public log: LogModule;
   public events: EventEmitter;
+  public modules: FactoryModules;
 
-  constructor(public state: FactoryState<State>) {
+  constructor(public state: State) {
     this.events = new EventEmitter();
+    this.modules = new FactoryModules();
 
     this.log = new LogModule("Factory");
     this.log.info("Env:", process.env.NODE_ENV);
@@ -77,7 +80,9 @@ class Factory<State extends object = any> {
     this.emit("finish", this);
   }
 
-  static createFlow<State extends object>(state: FactoryState<State>) {
+  static createFlow<State extends object>(
+    state: FactoryState<State>
+  ): FactoryFlow<FactoryState<State>> {
     const factory = new Factory(state);
     const flow = new FactoryFlow(factory, factory.events);
     return flow;

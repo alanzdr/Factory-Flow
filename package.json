@@ -1,11 +1,13 @@
 {
   "name": "factory-flow",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "",
   "type": "module",
   "scripts": {
+    "test": "vitest",
     "build": "tsc && tsc-alias",
-    "dev": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")"
+    "dev": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
+    "deploy": "npm run build && npm publish"
   },
   "repository": {
     "type": "git",
@@ -79,7 +81,8 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.10.1",
     "tsc-alias": "^1.8.10",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
   },
   "engines": {
     "node": ">=18.0.0 <=22.x.x",

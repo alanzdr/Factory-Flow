@@ -1,5 +1,5 @@
 import { Robot } from "@/core/robot";
-import Factory from "../factory";
+import { Factory } from "@/core/factory";
 import { IfFlowRobot, IIFFlowState } from "./flow";
 
 export class WorkStation {
