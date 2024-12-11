@@ -1,18 +1,17 @@
 import { inspect } from "node:util";
 import chalk from "chalk";
+import { ProgressBar } from "./progress";
 
 export type ILog = "deep" | "shallow" | "none";
 
 class LogModule {
-  name: string;
   type: ILog;
 
   isDeepDisabled: boolean;
   isShallowDisabled: boolean;
   isAllDisabled: boolean;
 
-  constructor(name: string) {
-    this.name = name;
+  constructor(private name: string) {
     this.type = String(process.env.EXECUTION_LOGGIN ?? "deep") as ILog;
 
     this.isDeepDisabled = this.type !== "deep";
@@ -20,9 +19,13 @@ class LogModule {
     this.isAllDisabled = this.type === "none";
   }
 
+  private logName() {
+    return chalk.bold.magenta(`[${this.name}]`);
+  }
+
   private log(...message: any[]) {
     if (this.isAllDisabled) return;
-    console.log(chalk.bold.magenta(`[${this.name}]`), ...message);
+    console.log(this.logName(), ...message);
   }
 
   public error(...message: any[]) {
@@ -67,6 +70,11 @@ class LogModule {
   public countIndex(name: string, index: number, total: number) {
     if (this.isDeepDisabled) return;
     this.log(`${name}: [${Number(index) + 1}/${total}]`);
+  }
+
+  public progress(name: string, total: number) {
+    const message = `${this.logName()} ${name}:`;
+    return new ProgressBar(message, total, this.isAllDisabled);
   }
 
   public object(object: any) {

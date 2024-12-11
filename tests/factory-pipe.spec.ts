@@ -8,7 +8,7 @@ import SetTextRobot from "./mocks/robots/set-text";
 import SetUpdatedRobot from "./mocks/robots/set-updated";
 
 // Should be able to create a factory
-describe("FACTORY:PIPE", () => {
+describe("FACTORY:PIPE", async () => {
   //
   test("should be able to execute a factory flow", async () => {
     const state = new State();

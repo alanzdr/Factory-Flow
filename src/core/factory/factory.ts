@@ -12,11 +12,11 @@ class Factory<State extends FactoryState = FactoryState> {
   public events: EventEmitter;
   public modules: FactoryModules;
 
-  constructor(public state: State) {
+  constructor(public state: State, public name?: string) {
     this.events = new EventEmitter();
     this.modules = new FactoryModules();
 
-    this.log = new LogModule("Factory");
+    this.log = new LogModule(name ?? "Factory");
     this.log.info("Env:", process.env.NODE_ENV);
     this.log.info("State:", state.constructor.name);
   }
@@ -81,9 +81,10 @@ class Factory<State extends FactoryState = FactoryState> {
   }
 
   static createFlow<State extends object>(
-    state: FactoryState<State>
+    state: FactoryState<State>,
+    name?: string
   ): FactoryFlow<FactoryState<State>> {
-    const factory = new Factory(state);
+    const factory = new Factory(state, name);
     const flow = new FactoryFlow(factory, factory.events);
     return flow;
   }
