@@ -2,21 +2,27 @@ import { inspect } from "node:util";
 import chalk from "chalk";
 import { ProgressBar } from "./progress";
 
-export type ILog = "deep" | "shallow" | "none";
+export type LogLevel = "deep" | "shallow" | "none";
 
 class LogModule {
-  type: ILog;
+  public level: LogLevel;
 
   isDeepDisabled: boolean;
   isShallowDisabled: boolean;
   isAllDisabled: boolean;
 
-  constructor(private name: string) {
-    this.type = String(process.env.EXECUTION_LOGGIN ?? "deep") as ILog;
+  constructor(private name: string, level?: LogLevel) {
+    this.level = String(
+      level ?? process.env.EXECUTION_LOGGIN ?? "deep"
+    ) as LogLevel;
 
-    this.isDeepDisabled = this.type !== "deep";
-    this.isShallowDisabled = this.type === "none";
-    this.isAllDisabled = this.type === "none";
+    this.isDeepDisabled = this.level !== "deep";
+    this.isShallowDisabled = this.level !== "deep" && this.level !== "shallow";
+    this.isAllDisabled = this.level === "none";
+  }
+
+  public setName(name: string) {
+    this.name = name;
   }
 
   private logName() {

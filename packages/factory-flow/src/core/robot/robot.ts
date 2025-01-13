@@ -9,14 +9,21 @@ abstract class Robot<
   Config = any
 > {
   public log: LogModule;
-  private initialTime: number = Date.now();
-  private initialStateProcess: number = 0;
+  protected name: string;
+  protected initialTime: number = Date.now();
+  protected initialStateProcess: number = 0;
 
   constructor(
     protected factory: Factory<State>,
     public configs: Config = null as Config
   ) {
-    this.log = new LogModule(this.constructor.name);
+    this.name = this.constructor.name;
+    this.log = new LogModule(this.name, factory.log.level);
+  }
+
+  public setName(name: string) {
+    this.name = name;
+    this.log.setName(name);
   }
 
   protected get state(): State {
@@ -30,6 +37,7 @@ abstract class Robot<
   protected async init(): Promise<void> {
     this.initialTime = Date.now();
     this.initialStateProcess = this.state.logs.length;
+    this.state.setRobotName(this.name);
   }
 
   abstract execute(): Promise<void>;
@@ -48,10 +56,10 @@ abstract class Robot<
   }
 
   public async run(): Promise<void> {
-    this.log.processInfo("Starting robot execution");
     // Initialize the robot
     await this.init();
     // Execute the robot
+    this.log.processInfo("Starting robot execution");
     await this.execute();
     // End the robot
     await this.end();
