@@ -4,9 +4,8 @@ import { IfFlowRobot, IIFFlowState } from "./flow";
 
 export class WorkStation {
   constructor(public robot: Robot) {}
-
   async run(): Promise<void> {
-    await this.robot.execute();
+    await this.robot.run();
   }
 }
 

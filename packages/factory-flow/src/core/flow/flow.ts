@@ -1,7 +1,7 @@
 import EventEmitter from "node:events";
 
 import { Robot } from "@/core/robot";
-import { RobotDerived } from "@/core/robot/derived";
+import { RobotDerived } from "@/core/robot/types";
 import {
   WorkStation,
   TryCatchWorkStation,

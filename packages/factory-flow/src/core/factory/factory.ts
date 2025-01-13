@@ -4,6 +4,8 @@ import EventEmitter from "node:events";
 import { FactoryState } from "@/core/state";
 import { FactoryFlow, WorkStation } from "@/core/flow";
 import { FactoryModules } from "@/core/modules";
+import { Robot } from "../robot";
+import { IRobotRegistry } from "../robot/types";
 
 const EXECUTION_STOPPED = "EXECUTION_STOPPED";
 
@@ -61,22 +63,23 @@ class Factory<State extends FactoryState = FactoryState> {
 
     this.log.processInfo("Starting Factory");
     this.log.separator();
-    for (const station of stations) {
+
+    for (let i = 0; i < stations.length; i++) {
+      const station = stations[i];
       try {
         await station.run();
         await this.state.save();
         this.log.separator();
       } catch (error) {
         this.emit("error", error);
-
         if ((error as Error).message === EXECUTION_STOPPED) {
           this.log.processInfo("User finished the factory");
           break;
         }
-
         throw error;
       }
     }
+
     this.emit("finish", this);
   }
 
