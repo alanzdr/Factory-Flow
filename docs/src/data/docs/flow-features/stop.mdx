@@ -1,0 +1,21 @@
+---
+title: "Stop the Flow"
+---
+You can stop the flow at any time, to do this, just call the `stop` method, the flow will be stopped.
+
+```ts
+
+Factory
+  .createFlow(state)
+    .if((factory) => factory.state.get("images").length > 0)
+      .pipe(DownloadImagesRobot)
+    .else()
+      .pipe(FetchImagesRobot)
+      // Stop the flow here
+      .stop()
+    .endif()
+    // This robot will not be executed in the else condition 
+    .pipe(ARemainingRobot)
+  .execute()
+
+```
