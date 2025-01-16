@@ -1,0 +1,25 @@
+#docs h2 {
+  font-size: theme(fontSize.3xl);
+  margin-top: theme(spacing.2);
+}
+
+#docs pre {
+  margin-bottom: theme(spacing.4);
+}
+
+#docs pre code {
+  border-radius: theme(borderRadius.lg);
+  box-shadow: theme(boxShadow.lg);
+}
+
+#docs .center-image {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#docs .center-image img {
+  max-width: 90%;
+  border-radius: theme(borderRadius.lg);
+}

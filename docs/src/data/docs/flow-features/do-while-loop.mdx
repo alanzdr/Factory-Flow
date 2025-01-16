@@ -1,0 +1,19 @@
+---
+title: "Do-while Loop Flow"
+---
+
+- You can create a loop flow, to do this, just use the `do` method, then all robots that were added below.
+- To return to the normal flow, just use `while`, passing boolean or a function that returns a boolean.
+- The loop it will only be executed as long as the condition remains `true`.
+
+```ts
+
+Factory
+  .createFlow(state)
+    .do()
+      .pipe(FetchSingleImageRobot)
+      .pipe(DownloadSingleImageRobot)
+    .while((factory) => factory.state.get("remainingImages").length > 0)
+  .execute()
+
+```

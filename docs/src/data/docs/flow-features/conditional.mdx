@@ -1,0 +1,19 @@
+---
+title: "Conditional Flow"
+---
+
+- You can create conditional flows, to do this, just use the `if` method, passing boolean or a function that returns a boolean, then all robots that were added below will only be executed if the condition is true.
+- You can add an `else`, to then execute if the condition is false, and to return to the normal flow, just use `endif`.
+
+```ts
+Factory
+  .createFlow(state)
+    .if((factory) => factory.state.get("images").length > 0)
+      .pipe(DownloadImagesRobot)
+    .else()
+      .pipe(FetchImagesRobot)
+      .pipe(DownloadImagesRobot)
+    .endif()
+  .execute()
+
+```

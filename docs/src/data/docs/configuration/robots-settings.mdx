@@ -1,0 +1,36 @@
+---
+title: "Pass settings to robots"
+---
+You can pass settings to the robots, to do this, just pass the settings as the second parameter in the `pipe` method as a object, the robot then receives, in constructor second parameter.
+
+
+```ts
+// In the Robot
+import CustomState from '../state';
+
+interface Settings {
+  limit: number;
+}
+
+class FetchImagesRobot extends Robot<CustomState, Settings> {
+  private limit: number;
+
+  // The settings are passed as the second parameter
+  constructor(factory: Factory, settings: Settings) {
+    super(factory);
+    this.limit = settings.limit;
+  }
+
+  async execute(): Promise<void> {
+    // ... robot execution code here
+  }
+}
+
+// In the Factory
+
+Factory.createFlow(state)
+  // Pass the settings as the second parameter
+  .pipe(FetchImagesRobot, { limit: 10 })
+  .execute();
+
+```

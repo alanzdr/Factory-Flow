@@ -1,0 +1,19 @@
+{
+  "siteName": "Factory Flow",
+  "author": {
+    "name": "Alanderson Zelindro da Rosa",
+    "url": "https://www.instagram.com/alandersonzdr"
+  },
+  "themeColor": "#b40f20",
+  "siteDescription": "",
+  "generator": {
+    "page": {
+      "title": "%s | Factory Flow",
+      "description": "%s"
+    },
+    "docs": {
+      "title": "%s - Documentation | Factory Flow",
+      "description": "%s"
+    }
+  }
+}
