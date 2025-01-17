@@ -66,6 +66,11 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        window: {
+          red: "#ed6a5f",
+          yellow: "#f5bf4f",
+          green: "#61c555",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -82,6 +87,10 @@ export default {
       },
       transitionTimingFunction: {
         DEFAULT: "cubic-bezier(0, 0, 0.4, 1)",
+      },
+
+      boxShadow: {
+        card: "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px",
       },
     },
   },

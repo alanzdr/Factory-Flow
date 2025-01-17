@@ -42,7 +42,6 @@ Factory.createFlow(state)
 To change the name that appears in the robot's logs, simply call the robot's `this.setName()` method.
 
 ```ts
-
 class MyRobot extends Robot {
   constructor(factory: Factory) {
     super(factory);
@@ -55,17 +54,14 @@ class MyRobot extends Robot {
     this.log.info('Hello World');
   }
 }
-
 ```
 
 ## Making Logs
 
-import Image from 'next/image'
 
 You can make logs inside the robots, to do this, just call some method of the `log` module injected inside the robot.
 
 ```ts
-
 class LogRobot extends Robot {
   async execute(): Promise<void> {
     this.log.error("Error Message");
@@ -74,17 +70,14 @@ class LogRobot extends Robot {
     this.log.success("Success Message");
   }
 }
-
 ```
+import TerminalImage from '@/components/docs/TerminalImage'
 
-<b>Result:</b>
+<TerminalImage 
+  src="/assets/docs/console-2.png" 
+  width={392}
+  height={214}
+  alt="Factory Flow Logs"
+/>
 
-<div className="center-image">
-  <Image 
-    src="/assets/docs/console-2.png" 
-    width={392}
-    height={214}
-    quality={90}
-    alt="Factory Flow Logs"
-  />
-</div>
+More information about the log module can be found [here](/docs/js/modules/log).

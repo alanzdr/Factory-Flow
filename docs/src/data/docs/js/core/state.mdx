@@ -1,3 +1,28 @@
 ---
-title: ""
+title: "State"
 ---
+
+
+### Make your robots know the State
+
+<i>Only in `typescript`</i>
+
+Pass the State Class as the first Generic when extending the Robot, now when you call `this.state` inside the robot, it will be typed with the state you passed.
+
+```ts
+// robots/fetchImages.ts
+import CustomState from '../state';
+import { Robot } from "factory-flow/core";
+
+class FetchImagesRobot extends Robot<CustomState> {
+  async execute(): Promise<void> {
+    // return the type that was declared in the state, 
+    // in this case, string[]
+    const images = this.state.get("images");
+    // ... your code to get the images here
+    this.state.set("images", images);
+  }
+}
+
+export default FetchImagesRobot;
+```

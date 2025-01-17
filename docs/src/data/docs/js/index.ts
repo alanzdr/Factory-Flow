@@ -47,8 +47,8 @@ const CATEGORIES: IDocCategory[] = [
     slug: "modules",
     pages: [
       {
-        title: "Logs",
-        slug: "logs",
+        title: "Log",
+        slug: "log",
       },
       {
         title: "Token",

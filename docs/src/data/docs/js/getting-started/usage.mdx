@@ -127,28 +127,6 @@ const state = new CustomState(initialState);
 export default state;
 ```
 
-### Make your robots know the State
-
-Pass the State Class as the first Generic when extending the Robot, now when you call `this.state` inside the robot, it will be typed with the state you passed.
-
-```ts
-// robots/fetchImages.ts
-import CustomState from '../state';
-import { Robot } from "factory-flow/core";
-
-class FetchImagesRobot extends Robot<CustomState> {
-  async execute(): Promise<void> {
-    // return the type that was declared in the state, 
-    // in this case, string[]
-    const images = this.state.get("images");
-    // ... your code to get the images here
-    this.state.set("images", images);
-  }
-}
-
-export default FetchImagesRobot;
-```
-
 ## Create and Execute the Factory Flow
 
 - Create the factory flow, and add the robots to the factory, the factory will be responsible for executing the robots in the correct order.
