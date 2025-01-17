@@ -12,6 +12,7 @@ declare module "next-plugin-svgr" {
   const plugin: unknown;
   export default plugin;
 }
+
 declare module "next-compose-plugins" {
   import type { NextConfig } from "next";
   const plugin: (plugins: unknown[], config: NextConfig) => unknown;

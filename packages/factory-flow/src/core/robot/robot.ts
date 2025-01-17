@@ -1,7 +1,6 @@
 import { Factory } from "@/core/factory";
 import { LogModule } from "@/modules/log";
 import { FactoryState } from "../state";
-import { FactoryModules } from "../modules";
 import { IRobotRegistry } from "./types";
 
 abstract class Robot<
@@ -9,7 +8,7 @@ abstract class Robot<
   Config = any
 > {
   public log: LogModule;
-  protected name: string;
+  private name: string;
   protected initialTime: number = Date.now();
   protected initialStateProcess: number = 0;
 
@@ -26,12 +25,12 @@ abstract class Robot<
     this.log.setName(name);
   }
 
-  protected get state(): State {
-    return this.factory.state;
+  public getName(): string {
+    return this.name;
   }
 
-  protected get modules(): FactoryModules {
-    return this.factory.modules;
+  protected get state(): State {
+    return this.factory.state;
   }
 
   protected async init(): Promise<void> {

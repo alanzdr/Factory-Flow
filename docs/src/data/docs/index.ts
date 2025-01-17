@@ -2,11 +2,11 @@ import { notFound, redirect } from "next/navigation";
 import React from "react";
 
 import { INavCategory, INavItem } from "@/types/nav";
-import { BestMatchProps, IDocData, IDocMetadata, IVersion } from "./types";
-import VERSIONS from "./versions";
+import { BestMatchProps, IDocData, IDocMetadata, ILanguage } from "./types";
+import LANGUAGES from "./languages";
 
 async function loadDocComponent(
-  version: string,
+  language: string,
   category: string,
   page: string
 ): Promise<{
@@ -14,7 +14,7 @@ async function loadDocComponent(
   metadata: IDocMetadata;
 }> {
   try {
-    const markdown = await import(`./${version}/${category}/${page}.mdx`);
+    const markdown = await import(`./${language}/${category}/${page}.mdx`);
 
     if (!markdown || !markdown.default) {
       throw new Error(`Cannot find component for ${category}/${page}`);
@@ -29,22 +29,26 @@ async function loadDocComponent(
   }
 }
 
-export function getVersion(slug: string): IVersion {
-  const version = VERSIONS.find((v) => v.slug === slug);
+export function getLanguage(slug: string): ILanguage {
+  const version = LANGUAGES.find((v) => v.slug === slug);
   if (!version) {
     notFound();
   }
   return version;
 }
 
-export function getVersionsNavigation(): INavItem[] {
-  return VERSIONS.map((version) => ({
+export function getLanguages(): ILanguage[] {
+  return LANGUAGES;
+}
+
+export function getLanguagesNavigation(): INavItem[] {
+  return LANGUAGES.map((version) => ({
     key: version.slug,
     title: version.title,
   }));
 }
 
-export function getVersionDocsNavigation(version: IVersion): INavCategory[] {
+export function getLanguageDocsNavigation(version: ILanguage): INavCategory[] {
   return version.categories.map((category) => ({
     key: category.slug,
     title: category.title,
@@ -56,18 +60,35 @@ export function getVersionDocsNavigation(version: IVersion): INavCategory[] {
   }));
 }
 
+export async function getCoreDocData(name: string) {
+  try {
+    const markdown = await import(`./core/${name}.mdx`);
+
+    if (!markdown || !markdown.default) {
+      throw new Error(`Cannot find component for ${name}`);
+    }
+
+    return {
+      Layout: markdown.default,
+      metadata: markdown.metadata,
+    };
+  } catch {
+    throw new Error(`Cannot find component for ${name}`);
+  }
+}
+
 export async function getDocsData(
-  versionSlug: string,
+  languageSlug: string,
   categorySlug: string,
   pageSlug: string
 ): Promise<IDocData> {
-  const version = VERSIONS.find((v) => v.slug === versionSlug);
+  const language = LANGUAGES.find((v) => v.slug === languageSlug);
 
-  if (!version) {
-    throw new Error(`Cannot find version with slug ${versionSlug}`);
+  if (!language) {
+    throw new Error(`Cannot find version with slug ${languageSlug}`);
   }
 
-  const category = version.categories.find((c) => c.slug === categorySlug);
+  const category = language.categories.find((c) => c.slug === categorySlug);
   if (!category) {
     throw new Error(`Cannot find category with slug ${categorySlug}`);
   }
@@ -79,12 +100,13 @@ export async function getDocsData(
   }
 
   const { Layout, metadata } = await loadDocComponent(
-    versionSlug,
+    languageSlug,
     categorySlug,
     pageSlug
   );
 
   return {
+    language,
     page,
     category,
     Layout,
@@ -93,20 +115,24 @@ export async function getDocsData(
 }
 
 export function getBestMatchPath(match: BestMatchProps) {
-  let version = match.version
-    ? VERSIONS.find((v) => v.slug === match.version)
+  let language = match.language
+    ? LANGUAGES.find((v) => v.slug === match.language)
     : null;
 
-  if (!version) {
-    version = VERSIONS[0];
+  if (!language) {
+    language = LANGUAGES[0];
+  }
+
+  if (!match.category && !match.page) {
+    return `/docs/${language.slug}`;
   }
 
   let category = match.category
-    ? version.categories.find((c) => c.slug === match.category)
+    ? language.categories.find((c) => c.slug === match.category)
     : null;
 
   if (!category) {
-    category = version.categories[0];
+    category = language.categories[0];
   }
 
   let page = match.page
@@ -117,7 +143,7 @@ export function getBestMatchPath(match: BestMatchProps) {
     page = category.pages[0];
   }
 
-  return `/docs/${version.slug}/${category.slug}/${page.slug}`;
+  return `/docs/${language.slug}/${category.slug}/${page.slug}`;
 }
 
 export function redirectToBestMatchPage(match: BestMatchProps) {

@@ -3,6 +3,18 @@
   margin-top: theme(spacing.2);
 }
 
+#docs h3 {
+  font-size: theme(fontSize.2xl);
+  margin-top: theme(spacing.2);
+}
+
+#docs a {
+  color: theme(colors.primary.DEFAULT);
+}
+#docs a:hover {
+  color: theme(colors.secondary.DEFAULT);
+}
+
 #docs pre {
   margin: theme(spacing.4) 0;
   width: 100%;

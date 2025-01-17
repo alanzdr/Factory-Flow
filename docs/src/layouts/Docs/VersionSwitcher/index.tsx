@@ -20,29 +20,29 @@ import { useCallback, useMemo } from "react";
 import { redirectToBestMatchAction } from "@/data/docs/action";
 
 interface Props {
-  currentVersion: string;
-  versions: INavItem[];
+  currentLanguage: string;
+  languages: INavItem[];
 }
 
-const VersionSwitcher: React.FC<Props> = ({ currentVersion, versions }) => {
-  const selectedVersion = useMemo(
-    () => versions.find((version) => version.key === currentVersion),
-    [currentVersion, versions]
+const VersionSwitcher: React.FC<Props> = ({ currentLanguage, languages }) => {
+  const selectedLanguage = useMemo(
+    () => languages.find((lang) => lang.key === currentLanguage),
+    [currentLanguage, languages]
   );
 
   const pathName = usePathname();
 
   const onChangeVersion = useCallback(
-    async (version: string) => {
+    async (language: string) => {
       console.log(pathName.split("/").slice(2));
 
-      const [_version, _category, _slug] = pathName.split("/").slice(2);
-      if (_version === version) return;
+      const [_lang, _category, _slug] = pathName.split("/").slice(2);
+      if (_lang === language) return;
 
       await redirectToBestMatchAction({
         category: _category,
         page: _slug,
-        version,
+        language,
       });
     },
     [pathName]
@@ -62,7 +62,7 @@ const VersionSwitcher: React.FC<Props> = ({ currentVersion, versions }) => {
               </div>
               <div className="flex flex-col gap-0.5 leading-none">
                 <span className="font-semibold">Documentation</span>
-                <span className="">{selectedVersion?.title}</span>
+                <span className="">{selectedLanguage?.title}</span>
               </div>
               <ChevronsUpDown className="ml-auto" />
             </SidebarMenuButton>
@@ -71,15 +71,15 @@ const VersionSwitcher: React.FC<Props> = ({ currentVersion, versions }) => {
             className="w-[--radix-dropdown-menu-trigger-width]"
             align="start"
           >
-            {versions.map((version) => (
+            {languages.map((lang) => (
               <DropdownMenuItem
-                key={version.key}
+                key={lang.key}
                 onSelect={() => {
-                  void onChangeVersion(version.key);
+                  void onChangeVersion(lang.key);
                 }}
               >
-                {version.title}{" "}
-                {version.key === selectedVersion?.key && (
+                {lang.title}{" "}
+                {lang.key === selectedLanguage?.key && (
                   <Check className="ml-auto" />
                 )}
               </DropdownMenuItem>

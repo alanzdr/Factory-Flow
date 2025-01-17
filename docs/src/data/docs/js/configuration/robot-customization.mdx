@@ -1,0 +1,59 @@
+---
+title: "Robot Customization"
+---
+
+## Passing properties to robots
+
+You can pass a configuration object to the robots, to do this, just pass the settings as the second parameter in the `pipe` method as a object, the robot then receives, in constructor second parameter.
+
+```ts
+// In the Robot
+import CustomState from '../state';
+
+interface MyRobotSettings {
+  limit: number;
+}
+
+class FetchImagesRobot extends Robot<CustomState, MyRobotSettings> {
+  private limit: number;
+
+  // The object are passed as the second parameter
+  constructor(factory: Factory, settings: MyRobotSettings) {
+    super(factory);
+    this.limit = settings.limit;
+  }
+
+  async execute(): Promise<void> {
+    // ... robot execution code here
+  }
+}
+
+// In the Factory
+
+Factory.createFlow(state)
+  // Pass the settings as the second parameter
+  .pipe(FetchImagesRobot, { limit: 10 })
+  .execute();
+
+```
+
+## Change Robot Log Name
+
+To change the name that appears in the robot's logs, simply call the robot's `this.setName()` method.
+
+```ts
+
+class MyRobot extends Robot {
+  constructor(factory: Factory) {
+    super(factory);
+
+    this.setName('My Great Robot');
+  }
+
+  async execute(): Promise<void> {
+    // ... robot execution code here
+    this.log.info('Hello World');
+  }
+}
+
+```

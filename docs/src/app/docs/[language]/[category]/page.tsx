@@ -3,11 +3,11 @@ import { redirectToBestMatchPage } from "@/data/docs";
 const Page = async ({
   params,
 }: {
-  params: Promise<{ version: string; category: string }>;
+  params: Promise<{ language: string; category: string }>;
 }) => {
-  const { version, category } = await params;
+  const { language, category } = await params;
   redirectToBestMatchPage({
-    version,
+    language,
     category,
   });
 };

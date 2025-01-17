@@ -2,7 +2,7 @@
 
 
 <p align="center">
-  <img src=".github/factory-flow-logo.png" width="200" alt="Factory Flow Logo">
+  <img src=".github/factory-flow-logo.png" width="240" alt="Factory Flow Logo">
 </p>
 
 <h1 align="center">Factory Flow</h1>

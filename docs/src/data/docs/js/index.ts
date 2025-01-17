@@ -6,12 +6,8 @@ const CATEGORIES: IDocCategory[] = [
     slug: "getting-started",
     pages: [
       {
-        title: "Introduction",
-        slug: "introduction",
-      },
-      {
-        title: "Principles",
-        slug: "principles",
+        title: "Installation",
+        slug: "installation",
       },
       {
         title: "Usage",
@@ -28,12 +24,8 @@ const CATEGORIES: IDocCategory[] = [
     slug: "configuration",
     pages: [
       {
-        title: "Robots settings",
-        slug: "robots-settings",
-      },
-      {
-        title: "Robot Name",
-        slug: "robot-name",
+        title: "Robot Customization",
+        slug: "robot-customization",
       },
       {
         title: "Log Level",
@@ -56,10 +48,6 @@ const CATEGORIES: IDocCategory[] = [
       {
         title: "Parallel",
         slug: "parallel",
-      },
-      {
-        title: "Dom",
-        slug: "dom",
       },
     ],
   },

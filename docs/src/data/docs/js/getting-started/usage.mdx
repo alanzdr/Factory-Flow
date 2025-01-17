@@ -3,32 +3,11 @@ title: "Usage"
 ---
 
 
-## 1. Install the package
+## Install the package
 
-After starting a new node.js project, install the dependency using your preferred manager.
+To get started, check out the [Installation](/docs/js/getting-started/installation) guide.
 
-```bash
-# Yarn
-yarn add factory-flow
-
-# NPM
-npm install factory-flow
-
-# PNPM
-pnpm install factory-flow
-```
-
-Currently the package only works in "ES modules", so you need to set the `type` field in your `package.json` to `module`.
-
-```json
-{
-  "type": "module"
-}
-```
-
-The use of typescript is not mandatory but is highly recommended.
-
-## 2. Create your robots
+## Create a Robot
 
 Create a folder to store your robots, and create a file for each robot, each robot must extend the `Robot` class, and implement the `execute` method.
 
@@ -81,7 +60,7 @@ class DownloadImagesRobot extends Robot {
 export default DownloadImagesRobot;
 ```
 
-## 3. Create the State Manager
+## Create the State Manager
 
 Create a state for the factory, you can create it from scratch by extending the "FactoryState" class, or use a ready-made state in the library.
 
@@ -148,7 +127,7 @@ const state = new CustomState(initialState);
 export default state;
 ```
 
-## 4. make your robots know the State
+### Make your robots know the State
 
 Pass the State Class as the first Generic when extending the Robot, now when you call `this.state` inside the robot, it will be typed with the state you passed.
 
@@ -170,7 +149,7 @@ class FetchImagesRobot extends Robot<CustomState> {
 export default FetchImagesRobot;
 ```
 
-## 5. Create and Execute the Factory Flow
+##Create and Execute the Factory Flow
 
 - Create the factory flow, and add the robots to the factory, the factory will be responsible for executing the robots in the correct order.
 - Here you can add as if they were blocks, and you can always remove or add a new `Robot` in any position.

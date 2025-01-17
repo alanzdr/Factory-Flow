@@ -3,7 +3,6 @@ import EventEmitter from "node:events";
 
 import { FactoryState } from "@/core/state";
 import { FactoryFlow, WorkStation } from "@/core/flow";
-import { FactoryModules } from "@/core/modules";
 import { IFactoryConfigs } from "./types";
 
 const EXECUTION_STOPPED = "EXECUTION_STOPPED";
@@ -11,12 +10,10 @@ const EXECUTION_STOPPED = "EXECUTION_STOPPED";
 class Factory<State extends FactoryState = FactoryState> {
   public log: LogModule;
   public events: EventEmitter;
-  public modules: FactoryModules;
   public name: string;
 
   constructor(public state: State, public configs: IFactoryConfigs = {}) {
     this.events = new EventEmitter();
-    this.modules = new FactoryModules();
 
     this.name = configs.name ?? "Factory";
 

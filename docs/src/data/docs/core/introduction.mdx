@@ -1,7 +1,29 @@
 ---
-title: "Principles"
+title: "Introduction"
+description: "Welcome to the Factory Flow Documentation."
 ---
-## 1. Like a real factory process
+
+import Image from 'next/image'
+
+Imagine a scenario where you need to run a script that goes through a image database, downloads them in a folder, checks their size and optimizes very heavy images.
+
+Doing this script from the beginning can bring some challenges, such as the time it takes to execute each step of the process, or if an error occurs in the middle, you may need to run it from the beginning again.
+
+<div className="center-image">
+  <Image 
+    src="/assets/docs/console-1.png" 
+    width={662}
+    height={494}
+    quality={90}
+    alt="Factory Flow Logs"
+  />
+</div>
+
+With this in mind, I developed this tool, thinking about two main principles.
+
+## Principles
+
+### 1. Like a real factory process
 
 The main idea of this tool is to simulate a `Robot Factory`, each `Robot` has its function, and as much as each `Robot` is one depends on the other, they just have access to the state, and perform their function by changing the state, and then giving way to the next `Robot`.
 
@@ -11,7 +33,7 @@ The `Robot` have no knowledge of the `Robot` that came before, nor of what came 
 
 the `Robot` that fetches the images data from the database, there is no need to have the function of downloading images, or optimizing them, each function will be used by a different `Robot`. The `Robot` that downloads the images only knows that it has a list of URLs in the state, and needs to download the images from that URL, while the one that optimizes, knows that there are images in a folder, and that it needs to optimize the heavy ones.
 
-## 2. Keep the state updated
+### 2. Keep the state updated
 
 The state is the main object of the tool, it is the object that will be passed to each `Robot`, and it is the object that will be updated by each `Robot`.
 

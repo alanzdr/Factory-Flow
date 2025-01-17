@@ -4,6 +4,7 @@ export interface IDocMetadata {
 }
 
 export interface IDocData {
+  language: ILanguage;
   page: IDocPage;
   category: IDocCategory;
   Layout: React.ComponentType<unknown>;
@@ -21,14 +22,14 @@ export interface IDocCategory {
   pages: IDocPage[];
 }
 
-export interface IVersion {
+export interface ILanguage {
   slug: string;
   title: string;
   categories: IDocCategory[];
 }
 
 export interface BestMatchProps {
-  version?: string;
+  language?: string;
   category?: string;
   page?: string;
 }

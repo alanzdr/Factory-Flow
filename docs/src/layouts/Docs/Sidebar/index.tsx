@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { SearchForm } from "@/components/search-form";
+// import { SearchForm } from "@/layouts/Docs/SearchForm";
 import VersionSwitcher from "@/layouts/Docs/VersionSwitcher";
 import {
   Sidebar,
@@ -21,19 +21,27 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 interface Props extends React.ComponentProps<typeof Sidebar> {
-  currentVersion: string;
-  versions: INavItem[];
+  currentLanguage: string;
+  languages: INavItem[];
   nav: INavCategory[];
 }
 
-export function AppSidebar({ versions, currentVersion, nav, ...props }: Props) {
+export function AppSidebar({
+  languages,
+  currentLanguage,
+  nav,
+  ...props
+}: Props) {
   const pathName = usePathname();
 
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <VersionSwitcher versions={versions} currentVersion={currentVersion} />
-        <SearchForm />
+        <VersionSwitcher
+          languages={languages}
+          currentLanguage={currentLanguage}
+        />
+        {/* <SearchForm /> */}
       </SidebarHeader>
       <SidebarContent>
         {nav.map((navCategory) => (

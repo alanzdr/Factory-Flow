@@ -1,10 +1,10 @@
-import { IVersion } from "./types";
+import { ILanguage } from "./types";
 
 import javascriptCategories from "./js";
 import pythonCategories from "./python";
 import rustCategories from "./rust";
 
-const VERSIONS: IVersion[] = [
+const LANGUAGES: ILanguage[] = [
   {
     title: "Javascript",
     slug: "js",
@@ -22,4 +22,4 @@ const VERSIONS: IVersion[] = [
   },
 ];
 
-export default VERSIONS;
+export default LANGUAGES;
