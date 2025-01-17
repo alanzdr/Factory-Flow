@@ -1,12 +1,16 @@
-import { loadDoc } from "@/data/docs";
+import CATEGORIES from "@/data/docs/categories";
+import { notFound, redirect } from "next/navigation";
 
 const Page = async ({ params }: { params: Promise<{ category: string }> }) => {
-  // const { category } = await params;
+  const { category: slug } = await params;
 
-  // const DocLayout = await loadDoc(category);
+  const category = CATEGORIES.find((c) => c.slug === slug);
 
-  // return <DocLayout />;
-  return false;
+  if (!category) {
+    notFound();
+  }
+
+  redirect(`/docs/${slug}/${category.pages[0].slug}`);
 };
 
 export default Page;
