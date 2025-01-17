@@ -2,12 +2,7 @@
 
 
 <p align="center">
-<svg width="150" height="auto" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 152.34 120.35">
-  <g>
-    <polygon class="cls-1" fill="#00c675" points="152.34 16.42 130.66 0 129.4 9.45 60.41 9.45 42.64 19.13 35.3 87.58 49.67 87.58 56.65 22.45 127.67 22.45 126.28 32.84 152.34 16.42"/>
-    <polygon points="0 103.93 21.68 120.35 22.94 110.91 91.93 110.91 109.7 101.23 117.04 32.77 102.67 32.77 95.69 97.9 24.67 97.9 26.06 87.51 0 103.93" fill="currentColor" />
-  </g>
-</svg>
+  <img src=".github/logo.png" width="200" alt="Factory Flow Logo">
 </p>
 
 <h1 align="center">Factory Flow</h1>
