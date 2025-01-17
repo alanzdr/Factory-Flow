@@ -46,10 +46,7 @@ const DocsWrapper: React.FC<Props> = ({
           </BreadcrumbList>
         </Breadcrumb>
       </div>
-      <div
-        id="docs"
-        className="flex flex-1 flex-col gap-4 py-10 container-small"
-      >
+      <div id="docs" className="flex flex-col gap-4 py-10 container-small">
         <div className="pb-2">
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl">
             {title}

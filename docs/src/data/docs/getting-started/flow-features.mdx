@@ -40,7 +40,7 @@ Factory
     .do()
       .pipe(FetchSingleImageRobot)
       .pipe(DownloadSingleImageRobot)
-    .while((factory) => factory.state.get("remainingImages").length > 0)
+    .while((factory) => factory.state.get("remainingImages"))
   .execute()
 
 ```

@@ -4,6 +4,9 @@ import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
 import remarkFrontmatter from "remark-frontmatter";
 import remarkMdxFrontmatter from "remark-mdx-frontmatter";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeSlug from "rehype-slug";
+import { all } from "lowlight";
 
 const nextConfig: NextConfig = {
   cleanDistDir: true,
@@ -13,7 +16,6 @@ const nextConfig: NextConfig = {
   env: {
     siteUrl: process.env.SITE_URL || "http://localhost:3000",
   },
-  transpilePackages: ["rehype-pretty-code"],
 
   /* config options here */
 };
@@ -25,7 +27,11 @@ const withMDX = createMDX({
       remarkFrontmatter,
       [remarkMdxFrontmatter, { name: "metadata" }],
     ],
-    rehypePlugins: [rehypeHighlight],
+    rehypePlugins: [
+      rehypeSlug,
+      rehypeAutolinkHeadings,
+      [rehypeHighlight, { detect: true, languages: all }],
+    ],
   },
 });
 

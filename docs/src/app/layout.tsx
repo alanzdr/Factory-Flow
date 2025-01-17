@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
 import "@/styles/index.css";
-import "highlight.js/styles/github-dark.css";
 
 import Contexts from "@/contexts";
 import { cn } from "@/lib/utils";
