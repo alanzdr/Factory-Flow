@@ -17,6 +17,10 @@ const CATEGORIES: IDocCategory[] = [
         title: "Usage",
         slug: "usage",
       },
+      {
+        title: "Flow Features",
+        slug: "flow-features",
+      },
     ],
   },
   {
@@ -56,28 +60,6 @@ const CATEGORIES: IDocCategory[] = [
       {
         title: "Dom",
         slug: "dom",
-      },
-    ],
-  },
-  {
-    title: "Flow Features",
-    slug: "flow-features",
-    pages: [
-      {
-        title: "Conditional",
-        slug: "conditional",
-      },
-      {
-        title: "Do-while loop",
-        slug: "do-while-loop",
-      },
-      {
-        title: "Try-Catch",
-        slug: "try-catch",
-      },
-      {
-        title: "Stop",
-        slug: "stop",
       },
     ],
   },
