@@ -55,14 +55,15 @@ export function getLanguageDocsNavigation(version: ILanguage): INavCategory[] {
     pages: category.pages.map((page) => ({
       key: `${category.slug}-${page.slug}`,
       title: page.title,
-      path: `/docs/${version.slug}/${category.slug}/${page.slug}`,
+      path:
+        page.fullPath || `/docs/${version.slug}/${category.slug}/${page.slug}`,
     })),
   }));
 }
 
-export async function getCoreDocData(name: string) {
+export async function getMainDocData(name: string) {
   try {
-    const markdown = await import(`./core/${name}.mdx`);
+    const markdown = await import(`./main/${name}.mdx`);
 
     if (!markdown || !markdown.default) {
       throw new Error(`Cannot find component for ${name}`);

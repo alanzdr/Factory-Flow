@@ -1,5 +1,5 @@
 ---
-title: "Robot Customization"
+title: "Robot"
 ---
 
 ## Passing properties to robots
@@ -57,3 +57,34 @@ class MyRobot extends Robot {
 }
 
 ```
+
+## Making Logs
+
+import Image from 'next/image'
+
+You can make logs inside the robots, to do this, just call some method of the `log` module injected inside the robot.
+
+```ts
+
+class LogRobot extends Robot {
+  async execute(): Promise<void> {
+    this.log.error("Error Message");
+    this.log.warning("Warning Message");
+    this.log.info("Info Message");
+    this.log.success("Success Message");
+  }
+}
+
+```
+
+<b>Result:</b>
+
+<div className="center-image">
+  <Image 
+    src="/assets/docs/console-2.png" 
+    width={392}
+    height={214}
+    quality={90}
+    alt="Factory Flow Logs"
+  />
+</div>

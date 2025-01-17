@@ -6,6 +6,11 @@ const CATEGORIES: IDocCategory[] = [
     slug: "getting-started",
     pages: [
       {
+        title: "Introduction",
+        slug: "",
+        fullPath: "/docs/js",
+      },
+      {
         title: "Installation",
         slug: "installation",
       },
@@ -13,23 +18,27 @@ const CATEGORIES: IDocCategory[] = [
         title: "Usage",
         slug: "usage",
       },
-      {
-        title: "Flow Features",
-        slug: "flow-features",
-      },
     ],
   },
   {
-    title: "Configuration",
-    slug: "configuration",
+    title: "Core",
+    slug: "core",
     pages: [
       {
-        title: "Robot Customization",
-        slug: "robot-customization",
+        title: "Factory",
+        slug: "factory",
       },
       {
-        title: "Log Level",
-        slug: "log-level",
+        title: "Robot",
+        slug: "robot",
+      },
+      {
+        title: "Flow",
+        slug: "flow",
+      },
+      {
+        title: "State",
+        slug: "state",
       },
     ],
   },

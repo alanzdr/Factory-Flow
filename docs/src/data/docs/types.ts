@@ -14,6 +14,7 @@ export interface IDocData {
 export interface IDocPage {
   title: string;
   slug: string;
+  fullPath?: string;
 }
 
 export interface IDocCategory {

@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-import { getLanguages, getCoreDocData } from "@/data/docs";
+import { getLanguages, getMainDocData } from "@/data/docs";
 import DocsWrapper from "@/layouts/Docs/Wrapper";
 import { getMetadata } from "@/utils/seo";
 
@@ -14,7 +14,7 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { metadata } = await getCoreDocData(INTRODUCTION_FILE);
+  const { metadata } = await getMainDocData(INTRODUCTION_FILE);
 
   try {
     return getMetadata("docs", {
@@ -28,7 +28,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const Page = async () => {
-  const { Layout, metadata } = await getCoreDocData(INTRODUCTION_FILE);
+  const { Layout, metadata } = await getMainDocData(INTRODUCTION_FILE);
 
   return (
     <DocsWrapper title={metadata.title} description={metadata.description}>
