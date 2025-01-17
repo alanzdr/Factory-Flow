@@ -11,10 +11,10 @@ export const getMetadata = (type: IDataType, pageMeta: IPageMeta): Metadata => {
     pageMeta.description || META.siteDescription
   );
 
-  const baseUrl = process.env.siteUrl;
+  const baseUrl = String(process.env.siteUrl);
 
   return {
-    metadataBase: new URL(process.env.SITE_URL as string),
+    metadataBase: new URL(baseUrl),
     title,
     description,
     twitter: {
