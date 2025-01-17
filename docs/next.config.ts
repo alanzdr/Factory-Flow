@@ -7,6 +7,8 @@ import remarkMdxFrontmatter from "remark-mdx-frontmatter";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeSlug from "rehype-slug";
 import { all } from "lowlight";
+import withSvgr from "next-plugin-svgr";
+import withPlugins from "next-compose-plugins";
 
 const nextConfig: NextConfig = {
   cleanDistDir: true,
@@ -35,4 +37,18 @@ const withMDX = createMDX({
   },
 });
 
-export default withMDX(nextConfig);
+const configsPluggins = [
+  [
+    withSvgr,
+    {
+      fileLoader: true,
+      svgrOptions: {
+        titleProp: true,
+        icon: true,
+      },
+    },
+  ],
+  [withMDX, {}],
+];
+
+export default withPlugins(configsPluggins, nextConfig);

@@ -1,11 +1,12 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import React from "react";
 
-import CATEGORIES from "./categories";
-import { INavCategory } from "@/types/nav";
-import { IDocData, IDocMetadata } from "./types";
+import { INavCategory, INavItem } from "@/types/nav";
+import { BestMatchProps, IDocData, IDocMetadata, IVersion } from "./types";
+import VERSIONS from "./versions";
 
 async function loadDocComponent(
+  version: string,
   category: string,
   page: string
 ): Promise<{
@@ -13,7 +14,7 @@ async function loadDocComponent(
   metadata: IDocMetadata;
 }> {
   try {
-    const markdown = await import(`./${category}/${page}.mdx`);
+    const markdown = await import(`./${version}/${category}/${page}.mdx`);
 
     if (!markdown || !markdown.default) {
       throw new Error(`Cannot find component for ${category}/${page}`);
@@ -24,27 +25,49 @@ async function loadDocComponent(
       metadata: markdown.metadata,
     };
   } catch {
-    notFound();
+    throw new Error(`Cannot find component for ${category}/${page}`);
   }
 }
 
-export function getDocsNavigation(): INavCategory[] {
-  return CATEGORIES.map((category) => ({
+export function getVersion(slug: string): IVersion {
+  const version = VERSIONS.find((v) => v.slug === slug);
+  if (!version) {
+    notFound();
+  }
+  return version;
+}
+
+export function getVersionsNavigation(): INavItem[] {
+  return VERSIONS.map((version) => ({
+    key: version.slug,
+    title: version.title,
+  }));
+}
+
+export function getVersionDocsNavigation(version: IVersion): INavCategory[] {
+  return version.categories.map((category) => ({
     key: category.slug,
     title: category.title,
     pages: category.pages.map((page) => ({
       key: `${category.slug}-${page.slug}`,
       title: page.title,
-      path: `/docs/${category.slug}/${page.slug}`,
+      path: `/docs/${version.slug}/${category.slug}/${page.slug}`,
     })),
   }));
 }
 
 export async function getDocsData(
+  versionSlug: string,
   categorySlug: string,
   pageSlug: string
 ): Promise<IDocData> {
-  const category = CATEGORIES.find((c) => c.slug === categorySlug);
+  const version = VERSIONS.find((v) => v.slug === versionSlug);
+
+  if (!version) {
+    throw new Error(`Cannot find version with slug ${versionSlug}`);
+  }
+
+  const category = version.categories.find((c) => c.slug === categorySlug);
   if (!category) {
     throw new Error(`Cannot find category with slug ${categorySlug}`);
   }
@@ -55,7 +78,11 @@ export async function getDocsData(
     throw new Error(`Cannot find page with slug ${pageSlug}`);
   }
 
-  const { Layout, metadata } = await loadDocComponent(categorySlug, pageSlug);
+  const { Layout, metadata } = await loadDocComponent(
+    versionSlug,
+    categorySlug,
+    pageSlug
+  );
 
   return {
     page,
@@ -63,4 +90,37 @@ export async function getDocsData(
     Layout,
     metadata,
   };
+}
+
+export function getBestMatchPath(match: BestMatchProps) {
+  let version = match.version
+    ? VERSIONS.find((v) => v.slug === match.version)
+    : null;
+
+  if (!version) {
+    version = VERSIONS[0];
+  }
+
+  let category = match.category
+    ? version.categories.find((c) => c.slug === match.category)
+    : null;
+
+  if (!category) {
+    category = version.categories[0];
+  }
+
+  let page = match.page
+    ? category.pages.find((p) => p.slug === match.page)
+    : null;
+
+  if (!page) {
+    page = category.pages[0];
+  }
+
+  return `/docs/${version.slug}/${category.slug}/${page.slug}`;
+}
+
+export function redirectToBestMatchPage(match: BestMatchProps) {
+  const path = getBestMatchPath(match);
+  redirect(path);
 }

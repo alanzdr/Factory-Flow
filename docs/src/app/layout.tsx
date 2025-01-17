@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Nunito } from "next/font/google";
+import { Exo_2 } from "next/font/google";
 import "@/styles/index.css";
 
 import Contexts from "@/contexts";
@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 import Header from "@/layouts/Header";
 
-const fontSans = Nunito({
+const fontSans = Exo_2({
   weight: ["400", "600"],
   subsets: ["latin"],
   display: "swap",

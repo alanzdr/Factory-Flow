@@ -1,15 +1,30 @@
 import { AppSidebar } from "@/layouts/Docs/Sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { getDocsNavigation } from "@/data/docs";
+import { getVersionDocsNavigation } from "@/data/docs";
 
 import React from "react";
+import { IVersion } from "@/data/docs/types";
+import { INavItem } from "@/types/nav";
 
-const DocsLayout: React.FC<React.PropsWithChildren> = async ({ children }) => {
-  const categoriesNav = getDocsNavigation();
+interface Props {
+  versionsNavigations: INavItem[];
+  version: IVersion;
+}
+
+const DocsLayout: React.FC<React.PropsWithChildren<Props>> = async ({
+  children,
+  version,
+  versionsNavigations,
+}) => {
+  const categoriesNav = getVersionDocsNavigation(version);
 
   return (
     <SidebarProvider>
-      <AppSidebar nav={categoriesNav} versions={["1", "2", "3"]} />
+      <AppSidebar
+        nav={categoriesNav}
+        versions={versionsNavigations}
+        currentVersion={version.slug}
+      />
       {children}
     </SidebarProvider>
   );

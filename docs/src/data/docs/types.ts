@@ -20,3 +20,15 @@ export interface IDocCategory {
   slug: string;
   pages: IDocPage[];
 }
+
+export interface IVersion {
+  slug: string;
+  title: string;
+  categories: IDocCategory[];
+}
+
+export interface BestMatchProps {
+  version?: string;
+  category?: string;
+  page?: string;
+}

@@ -1,0 +1,24 @@
+---
+title: "Principles"
+---
+## 1. Like a real factory process
+
+The main idea of this tool is to simulate a `Robot Factory`, each `Robot` has its function, and as much as each `Robot` is one depends on the other, they just have access to the state, and perform their function by changing the state, and then giving way to the next `Robot`.
+
+The `Robot` have no knowledge of the `Robot` that came before, nor of what came after, They don't communicate with each other.
+
+<b>For example:</b>
+
+the `Robot` that fetches the images data from the database, there is no need to have the function of downloading images, or optimizing them, each function will be used by a different `Robot`. The `Robot` that downloads the images only knows that it has a list of URLs in the state, and needs to download the images from that URL, while the one that optimizes, knows that there are images in a folder, and that it needs to optimize the heavy ones.
+
+## 2. Keep the state updated
+
+The state is the main object of the tool, it is the object that will be passed to each `Robot`, and it is the object that will be updated by each `Robot`.
+
+The state needs to be loaded at the beginning, and updated with each update made, each `Robot` has the responsibility to check the state and avoid duplicate work.
+
+Keeping the state updated, it is possible to temporarily remove a `Robot` from the process, to focus on developing another.
+
+<b>For example:</b>
+
+If the `Robot` that downloads the images has already downloaded the image, it will not download them again, it will only download the images that are not in the state.

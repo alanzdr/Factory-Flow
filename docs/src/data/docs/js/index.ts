@@ -1,4 +1,4 @@
-import { IDocCategory } from "./types";
+import { IDocCategory } from "../types";
 
 const CATEGORIES: IDocCategory[] = [
   {
