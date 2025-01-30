@@ -11,11 +11,13 @@ class Factory<State extends FactoryState = FactoryState> {
   public log: LogModule;
   public events: EventEmitter;
   public name: string;
+  private isInitialized: boolean;
 
   constructor(public state: State, public configs: IFactoryConfigs = {}) {
     this.events = new EventEmitter();
 
     this.name = configs.name ?? "Factory";
+    this.isInitialized = false;
 
     this.log = new LogModule(this.name, configs.log);
     this.log.info("Env:", process.env.NODE_ENV);
@@ -38,22 +40,16 @@ class Factory<State extends FactoryState = FactoryState> {
     this.events.emit(eventName, ...args);
   }
 
-  /** @STATE */
+  /** @EXECUTE */
 
-  public async save() {
-    await this.state.save();
-  }
-
-  public set<K extends keyof State>(key: K, value: State[K]) {
-    this.state.set(key, value);
-  }
-
-  public get<K extends keyof State>(key: K): State[K] {
-    return this.state.get(key);
-  }
-
-  public async runStations(stations: WorkStation[]) {
+  public async initialize() {
+    if (this.isInitialized) return;
     await this.state.initialize();
+    this.isInitialized = true;
+  }
+
+  public async executeStations(stations: WorkStation[]) {
+    await this.initialize();
 
     this.emit("start", this);
     this.once("stop", () => {

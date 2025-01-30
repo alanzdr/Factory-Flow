@@ -1,6 +1,6 @@
 {
   "name": "factory-flow",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "",
   "type": "module",
   "scripts": {
@@ -72,13 +72,9 @@
     }
   },
   "dependencies": {
-    "chalk": "^5.3.0",
-    "jsdom": "^25.0.1",
-    "jsonwebtoken": "^9.0.2"
+    "chalk": "^5.3.0"
   },
   "devDependencies": {
-    "@types/jsdom": "^21.1.7",
-    "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.10.1",
     "tsc-alias": "^1.8.10",
     "typescript": "^5.7.2",

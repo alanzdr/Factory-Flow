@@ -115,7 +115,7 @@ class FactoryFlow<State extends FactoryState = FactoryState> {
 
   public async execute() {
     try {
-      await this.factory.runStations(this.stations);
+      await this.factory.executeStations(this.stations);
       this.factory.log.processInfo("Factory execution completed");
     } catch (error) {
       this.factory.log.error("Error while running factory");
