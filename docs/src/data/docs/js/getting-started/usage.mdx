@@ -1,17 +1,22 @@
 ---
 title: "Usage"
+description: "Learn how to use Factory Flow in your project."
 ---
 
 
-## Install the package
+## Getting Started
 
-To get started, check out the [Installation](/docs/js/getting-started/installation) guide.
+Begin by following the [Installation Guide](/docs/js/getting-started/installation) to set up Factory Flow in your project.
 
-## Create a Robot
 
-Create a folder to store your robots, and create a file for each robot, each robot must extend the `Robot` class, and implement the `execute` method.
+## Building Your Robots
 
-<b>Robot to Fetch Images URL </b>
+
+Organize your robots by creating a dedicated folder and assigning each robot its own file. Each robot should extend the `Robot` class and implement the `execute` method to define its task.
+
+### Example:
+
+- **Robot to Fetch Image URLs**:
 
 ```ts
 // robots/fetchImages.ts
@@ -20,9 +25,9 @@ import { Robot } from "factory-flow/core";
 class FetchImagesRobot extends Robot {
   async execute(): Promise<void> {
     const images: string[] = [];
-    // ... your code to get the images here
+    // Add your code to fetch the images here
     this.state.set("images", images);
-    // OR
+    // ou can also append to existing state data
     this.state.set("images", (oldImages) => {
       return [...oldImages, ...images];
     });
@@ -31,7 +36,7 @@ class FetchImagesRobot extends Robot {
 
 export default FetchImagesRobot;
 ```
-<b>Robot to download the images</b>
+- **Robot to Download Images**:
 
 ```ts
 // robots/downloadImages.ts
@@ -47,10 +52,9 @@ class DownloadImagesRobot extends Robot {
       if (alreadyDownloaded.includes(image)) {
         continue;
       }
-      // ... your code to download the images here
+       // Code to download the image goes here
       alreadyDownloaded.push(image);
-      // Save the state after each download
-      // to avoid downloading the same image again
+      // Keep the state updated to avoid re-downloading
       this.state.set("downloaded", alreadyDownloaded);
       await this.state.save();
     }
@@ -60,11 +64,13 @@ class DownloadImagesRobot extends Robot {
 export default DownloadImagesRobot;
 ```
 
-## Create the State Manager
+## Setting Up the State Manager
 
-Create a state for the factory, you can create it from scratch by extending the "FactoryState" class, or use a ready-made state in the library.
+Define a state manager for the factory. You can either extend the `FactoryState` class for a custom implementation or use a pre-built option from the library.
 
-<b>Using a JSON file</b>
+### Example:
+
+- **Using a JSON file**: Leverage a JSON file to manage state.
 
 ```ts
 // state.ts
@@ -88,7 +94,7 @@ const state = new JSONState<State>(initialState, statePath);
 export default state;
 ```
 
-<b>Creating a custom state</b>
+- **Creating a custom state**: Alternatively, create a tailored state management system.
 
 ```ts
 // state.ts
@@ -104,16 +110,13 @@ class CustomState extends FactoryState<State> {
     super(initialState);
   }
 
-  public async initialize(): Promise<boolean> {
-    // Your code to initialize the state
-    // This is where you will load the state already 
-    // saved at the beginning of the execution
+  public async initialize() {
+     // Initialize state from saved data
     return true;
   }
 
   public async save() {
-    // Your code to save the state
-    // This is where you will save the state after each update
+    // Save state updates as needed
   }
 }
 
@@ -127,11 +130,9 @@ const state = new CustomState(initialState);
 export default state;
 ```
 
-## Create and Execute the Factory Flow
+## Creating and Executing the Factory Flow
 
-- Create the factory flow, and add the robots to the factory, the factory will be responsible for executing the robots in the correct order.
-- Here you can add as if they were blocks, and you can always remove or add a new `Robot` in any position.
-- After adding the robots, the `.execute()` method must be called for the factory to begin the process.
+Construct the factory flow by adding robots and executing them in sequence.
 
 ```ts
 // factory.ts
@@ -141,22 +142,32 @@ import FetchImagesRobot from "./robots/fetchImages";
 import DownloadImagesRobot from "./robots/downloadImages";
 import state from "./state";
 
-// Create and execute the factory flow
+// Build and execute the factory flow
 Factory.createFlow(state)
   .pipe(FetchImagesRobot)
   .pipe(DownloadImagesRobot)
   .execute();
 
-// OR
-
+// Alternatively, encapsulate in an async function
 async function runImageDownloadFactory() {
   const factory = await Factory
     .createFlow(state)
     .pipe(FetchImagesRobot)
     .pipe(DownloadImagesRobot)
     .execute();
-  // You can access the state after the execution
+  // Access the state post-execution
   console.log(factory.state.get("downloaded"));
 }
 
 ```
+
+After adding the robots, the `.execute()` method must be called for the factory to begin the process.
+
+{/* TODO: Add Modules pages */}
+## Modules
+<i>Coming Soon</i>
+
+## Learn more
+
+{/* TODO: Add Handling Errors Section */}
+<i>Coming Soon</i>

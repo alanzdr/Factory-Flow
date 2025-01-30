@@ -82,6 +82,11 @@ class Factory<State extends FactoryState = FactoryState> {
     this.emit("finish", this);
   }
 
+  public createFlow() {
+    const flow = new FactoryFlow(this, this.events);
+    return flow;
+  }
+
   static createFlow<State extends object>(
     state: FactoryState<State>,
     configs?: IFactoryConfigs

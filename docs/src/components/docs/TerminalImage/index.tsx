@@ -20,7 +20,9 @@ const TerminalImage: React.FC<Props> = ({
   className,
 }) => {
   return (
-    <div className={cn("w-full flex items-center justify-center", className)}>
+    <div
+      className={cn("w-full flex items-center justify-center mb-4", className)}
+    >
       <div className="relative max-w-full bg-muted rounded-md shadow-card">
         <div className="absolute top-2.5 left-3 flex items-center gap-2">
           <div className="w-2.5 h-2.5 rounded-full block bg-window-red" />

@@ -1,28 +1,84 @@
 ---
 title: "State"
+description: "Where the entire process is saved"
 ---
 
+The `State` is where the current process data is saved, It is important to keep the execution of each robot saved, to prevent costly operations from being executed multiple times.
 
-### Make your robots know the State
+## Custom State Implementation
 
-<i>Only in `typescript`</i>
+To define a custom state, extend the `FactoryState` class and implement the `initialize` and `save` methods, which manage data loading and persistence.
 
-Pass the State Class as the first Generic when extending the Robot, now when you call `this.state` inside the robot, it will be typed with the state you passed.
 
 ```ts
-// robots/fetchImages.ts
-import CustomState from '../state';
-import { Robot } from "factory-flow/core";
+import { FactoryState } from "factory-flow/core";
+import type { MyState } from "./types";
 
-class FetchImagesRobot extends Robot<CustomState> {
-  async execute(): Promise<void> {
-    // return the type that was declared in the state, 
-    // in this case, string[]
-    const images = this.state.get("images");
-    // ... your code to get the images here
-    this.state.set("images", images);
+// Example of some database implementation
+import Database from './database'
+
+class CustomState extends FactoryState<MyState> {
+  constructor(initialState: MyState) {
+    super(initialState);
+  }
+
+  public async initialize(): Promise<void> {
+    // Initialize state from saved data
+    this.data = await Database.load()
+    return true;
+  }
+
+  public async save(): Promise<void> {
+    // Save state updates as needed
+    await Database.save(this.data)
   }
 }
+```
 
-export default FetchImagesRobot;
+- **initialize**: Executes at the commencement of the Factory execution, tasked with loading the initial state.
+- **save**: Invoked after each robot execution or manually during the robot's operation, ensuring state updates are captured.
+
+## Pre-built State Implementations
+
+The Factory Flow library offers some predefined state implementations for ease of use:
+
+### JSON State
+
+A convenient option for persisting state data within a JSON file located in the project directory, suitable for many applications requiring simple persistence.
+
+```ts
+import { JSONState } from "factory-flow/core";
+import type { MyState } from "./types";
+
+const initialState: MyState = {
+  images: [],
+  downloaded: [],
+};
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const statePath = path.resolve(__dirname, 'tmp', "state.json");
+
+const state = new JSONState<MyState>(initialState, statePath);
+
+export default state;
+```
+
+### Memory State
+
+This state keeps data in memory, utilizing a global variable. It's particularly useful for testing and debugging purposes where persistent storage is unnecessary.
+
+```ts
+import { MemoryState } from "factory-flow/core";
+import type { MyState } from "./types";
+
+const initialState: MyState = {
+  images: [],
+  downloaded: [],
+};
+
+const state = new MemoryState<MyState>(initialState);
+
+export default state;
 ```

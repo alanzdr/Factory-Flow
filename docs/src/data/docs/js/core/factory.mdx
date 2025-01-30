@@ -1,3 +1,154 @@
 ---
 title: "Factory"
+description: "The base of the flow process"
 ---
+
+The `Factory` class is the cornerstone of Factory Flow, providing the framework to create and manage robot workflows effectively.
+
+## Getting Started
+
+To utilize the `Factory` class, you'll first need to have at least one [Robot](/docs/js/core/robot) and a [State Manager](/docs/js/core/state) configured. Once these are ready, import the Factory from "factory-flow/core" to initiate the flow creation process.
+
+```ts
+// factory.ts
+import { Factory } from "factory-flow/core";
+```
+
+### Executing a Factory Flow
+
+To initiate a Factory Flow, use the `Factory.createFlow()` method, supplying it with your initial state. You can sequentially incorporate robots into the flow using the `pipe` or others [Flow](/docs/js/core/flow) methods.
+
+```ts
+Factory.createFlow(state)
+  .pipe(FetchImagesRobot)
+  .pipe(DownloadImagesRobot)
+  .execute();
+```
+
+The `execute` method returns a `Promise` that resolves when the flow completes. You can use this to chain additional actions or handle the flow's completion.
+
+
+```ts
+// Alternatively, encapsulate in an async function
+async function runImageDownloadFactory() {
+  const factory = await Factory
+    .createFlow(state)
+    .pipe(FetchImagesRobot)
+    .pipe(DownloadImagesRobot)
+    .execute();
+}
+```
+
+Post-execution, you can access the `Factory` instance to interact with the state or to start new flows.
+
+```ts
+console.log(factory.state.get("downloaded"));
+```
+
+To create an additional [Flow](/docs/js/core/flow), use:
+
+```ts
+factory.createFlow()
+  .pine(AnotherRobot)
+  .execute();
+```
+
+You can also create a `Factory` object without an initial flow, using the `new` keyword:
+
+```ts
+const factory = new Factory(state);
+// The create a new flow
+await factory.createFlow()
+  .pine(AnotherRobot)
+  .execute();
+```
+
+## Configuration
+
+When creating a new `Factory` or using the createFlow method, you can pass a configuration object to tailor the flow's behavior. The configuration supports:
+
+<div className="attributes">
+- `name`: A string for identifying the factory instance, useful in logs and debugging. (default: 'Factory').
+- `logLevel`: The verbosity level of logging. acceptable values are `deep`, `shallow` or `none`. (default: 'deep').
+</div>
+
+```ts
+// with createFlow
+Factory.createFlow(state, {
+  name: 'My Custom Factory',
+  logLevel: 'shallow'
+})
+// with 'new' keyword
+const factory = new Factory(state, {
+  name: 'My Custom Factory',
+  logLevel: 'shallow'
+})
+```
+
+## Events
+
+The `Factory` class emits some events during its operation, providing hooks for custom logic and error handling.
+
+- `start`: Emitted when the factory flow begins.
+- `error`: Emitted when an error occurs during the execution.
+- `finish`: Triggered when the flow completes.
+
+### Emitting Custom Events
+
+It is also possible to emit custom events, using the `Factory.emit()` method.
+
+```ts
+factory.emit('myCustomEvent', { status: 'completed' });
+```
+
+### Subscribing to Events
+
+Use the `on` method to subscribe to events, or `once` to listen for a single occurrence.
+
+```ts
+// Subscribing to the 'error' event
+factory.on('error', (error) => {
+  console.error('An error occurred:', error);
+});
+// Listening to a custom event
+factory.on('myCustomEvent', (data) => {
+  console.log('Custom event received');
+});
+```
+
+### Accessing Factory Events Inside Robots
+
+Within a `Robot`, access the factory instance through the `this.factory` property to listen and dispatch events.
+
+```ts
+import { Robot } from "factory-flow/core";
+
+class MyRobot extends Robot {
+  async execute(): Promise<void> {
+    // Emit a custom event
+    this.factory.emit('myCustomEvent', { status: 'completed' });
+    // Subscribing to a custom event
+    this.factory.on('myCustomEvent', (data) => {
+      console.log('Custom event received');
+    });
+  }
+}
+
+export default MyRobot;
+```
+
+### Handling Events in the Flow
+
+Events can be incorporated at the flow level using `on` or `once` method.
+
+```ts
+Factory.createFlow(state)
+  .pipe(MyRobot)
+  .once('myCustomEvent', (data) => {
+    console.log('Custom event received');
+  })
+  .on('error', (error) => {
+    console.error('An error occurred:', error);
+  })
+  .execute();
+```

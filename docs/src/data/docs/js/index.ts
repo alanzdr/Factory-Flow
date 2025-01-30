@@ -42,24 +42,29 @@ const CATEGORIES: IDocCategory[] = [
       },
     ],
   },
-  {
-    title: "Modules",
-    slug: "modules",
-    pages: [
-      {
-        title: "Log",
-        slug: "log",
-      },
-      {
-        title: "Token",
-        slug: "token",
-      },
-      {
-        title: "Parallel",
-        slug: "parallel",
-      },
-    ],
-  },
+  // TODO: Add Modules
+  // {
+  //   title: "Modules",
+  //   slug: "modules",
+  //   pages: [
+  //     {
+  //       title: "All Modules",
+  //       slug: "list",
+  //     },
+  //     {
+  //       title: "Log",
+  //       slug: "log",
+  //     },
+  //     {
+  //       title: "Token",
+  //       slug: "token",
+  //     },
+  //     {
+  //       title: "Parallel",
+  //       slug: "parallel",
+  //     },
+  //   ],
+  // },
 ];
 
 export default CATEGORIES;

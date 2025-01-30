@@ -1,16 +1,34 @@
 #docs h2 {
   font-size: theme(fontSize.3xl);
-  margin-top: theme(spacing.2);
+  margin-top: theme(spacing.8);
+  padding-bottom: theme(spacing.4);
+  line-height: 1.1;
+  border-bottom: 1px solid theme(colors.accent.DEFAULT);
 }
 
 #docs h3 {
   font-size: theme(fontSize.2xl);
-  margin-top: theme(spacing.2);
+  margin-top: theme(spacing.4);
+  line-height: 1.1;
+}
+
+#docs ul {
+  list-style: disc;
+  padding-left: theme(spacing.4);
+}
+
+#docs ul li {
+  margin-top: theme(spacing.4);
+}
+
+#docs ul li:first-of-type {
+  margin-top: 0;
 }
 
 #docs a {
   color: theme(colors.primary.DEFAULT);
 }
+
 #docs a:hover {
   color: theme(colors.secondary.DEFAULT);
 }

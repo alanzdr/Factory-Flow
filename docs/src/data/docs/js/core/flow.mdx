@@ -1,18 +1,80 @@
 ---
 title: "Flow"
+description: "The order the robots must follow"
 ---
-You can add extra functions to the flow, such as conditions and loops.
 
-<b>Notice:</b>
+The `Flow` class is the engine responsible for orchestrating the robots in Factory Flow, allowing for the addition of robots, conditions, loops, and error handling.
 
-- You need to be in the standard layer of the flow to be able to call `execute`, so every extra function that starts needs to be ended with `endif`, `while` or `catch` to return to the standard layer.
-- You can add as many extra functions as you want, with several extra layers.
-- You can add extra functions in any position in the flow, and you can always remove or add a new `Robot` in any position.
+## Getting Started
 
-## Conditional Flow
+To initiate a Factory Flow, employ the `createFlow` method from the Factory, providing the initial state. Use flow methods to incorporate robots into the flow and finalize by invoking the `execute()` method
 
-- You can create conditional flows, to do this, just use the `if` method, passing boolean or a function that returns a boolean, then all robots that were added below will only be executed if the condition is true.
-- You can add an `else`, to then execute if the condition is false, and to return to the normal flow, just use `endif`.
+```ts
+Factory.createFlow(state)
+  .pipe(MyFirstRobot)
+  .pipe(MySecondRobot)
+  .execute();
+```
+
+Every method in the Flow returns the `Flow` instance, permitting chaining of methods until the execution stage is reached.
+
+Methods such as `if`, `do` or `try` introduce additional layers in the flow. Returning to the main flow layer requires closing these methods with `endif`, `while` or `catch`.
+
+### Comprehensive Flow Example
+
+```ts
+Factory
+  .createFlow(state)
+    // Fetch images URLs
+    .do()
+      .pipe(FetchImageURLSRobot, {
+        url: "https://example.com/images"
+      })
+    .while((factory) => factory.state.get("remainingImages"))
+    // Download images
+    .if((factory) => factory.state.get("images").length > 0)
+      .pipe(DownloadImagesRobot)
+    .else()
+      // Terminate the flow if no images are available
+      .stop()
+    .endif()
+    // Update images sizes
+    .pipe(UpdateImagesSizesRobot)
+    // Attempt to resize images and handle potential errors
+    .try()
+      .pipe(ResizeImagesRobot)
+    .catch(async (error) => {
+      console.error("Error resizing images", error);
+    })
+  .execute()
+
+```
+
+## Flow Methods
+
+### Pipe
+
+The `pipe` method is fundamental for adding a robot to the flow. Pass the robot class as an argument to integrate it into the sequence.
+
+```ts
+Factory.createFlow(state)
+  .pipe(MyFirstRobot)
+  .pipe(MySecondRobot)
+  .execute();
+```
+
+A configuration object can also be passed as a second argument, which will be used by the robot's constructor.
+
+```ts
+Factory.createFlow(state)
+  .pipe(MyFirstRobot, { limit: 10 })
+  .pipe(MySecondRobot)
+  .execute();
+```
+
+### If
+
+Conditional flows are facilitated by the `if` method. It takes a boolean or a function returning a boolean, executing subsequent robots only if true. The `else` method is available for false conditions, and returning to the main flow is achieved with `endif`.
 
 ```ts
 Factory
@@ -27,11 +89,10 @@ Factory
 
 ```
 
-## Do-while Loop Flow
+### Do-While
 
-- You can create a loop flow, to do this, just use the `do` method, then all robots that were added below.
-- To return to the normal flow, just use `while`, passing boolean or a function that returns a boolean.
-- The loop it will only be executed as long as the condition remains `true`.
+You can create a loop flow, to do this, just use the `do` method, then all robots that were added below. To return to the normal flow, just use `while`, passing boolean or a function that returns a boolean. 
+
 
 ```ts
 
@@ -45,10 +106,9 @@ Factory
 
 ```
 
-## Try-Catch Flow
+### Try-Catch
 
-- You can create a try-catch flow, to catch any errors that happen during the flow, to do this, just use the `try` method, then all robots that were added below.
-- To return to the normal flow, just use `catch`, passing a function that will be executed if an error occurs.
+Error handling within flows is managed by the `try-catch` construct. Using `try`, errors encountered in the subsequent robots can be addressed in the `catch` block.
 
 ```ts
 
@@ -59,16 +119,16 @@ Factory
       .pipe(DownloadImagesRobot)
     .catch(async (error) => {
       console.error("Error fetching images", error);
-      // You can also stop the flow calling throw again here
+      // Optionally halt the flow by rethrowing the error
       // throw error;
     })
   .execute()
 
 ```
 
-## Stop the Flow
+### Stop
 
-You can stop the flow at any time, to do this, just call the `stop` method, the flow will be stopped.
+Flow execution can be terminated at any point using the `stop` method, ceasing further processing.
 
 ```ts
 
@@ -78,10 +138,10 @@ Factory
       .pipe(DownloadImagesRobot)
     .else()
       .pipe(FetchImagesRobot)
-      // Stop the flow here
+      // Terminate the flow at this point
       .stop()
     .endif()
-    // This robot will not be executed in the else condition 
+    // This robot will not execute if the flow was stopped
     .pipe(ARemainingRobot)
   .execute()
 

@@ -19,7 +19,7 @@ abstract class FactoryState<State extends object = any> {
     }
   }
 
-  public abstract initialize(): Promise<boolean>;
+  public abstract initialize(): Promise<void>;
   public abstract save(): Promise<void>;
 
   public set<K extends keyof State>(

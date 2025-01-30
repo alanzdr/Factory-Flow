@@ -1,10 +1,29 @@
 ---
 title: "Robot"
+description: "The core building block of Factory Flow"
 ---
 
-## Passing properties to robots
+import TerminalImage from '@/components/docs/TerminalImage'
 
-You can pass a configuration object to the robots, to do this, just pass the settings as the second parameter in the `pipe` method as a object, the robot then receives, in constructor second parameter.
+The `Robot` class is the fundamental unit in Factory Flow, representing individual tasks within a workflow. Each robot is designed to perform a specific function, interacting with the state to share and manage data across different robots.
+
+## Getting Started
+
+To define a robot, extend the `Robot` class and implement its `execute` method. This method should encapsulate the core logic for the robot's task, allowing it to interact with the state for reading or updating data.
+
+```ts
+import { Robot } from "factory-flow/core";
+
+class MyRobot extends Robot {
+  async execute(): Promise<void> {
+    // Implement the logic for the robot's task here
+  }
+}
+```
+
+### Custom Parameters
+
+Robots can receive a configuration object, which can be passed as the second parameter in the `pipe` method. This configuration is accessible via the robot’s constructor as the second parameter.
 
 ```ts
 // In the Robot
@@ -17,46 +36,95 @@ interface MyRobotSettings {
 class FetchImagesRobot extends Robot<CustomState, MyRobotSettings> {
   private limit: number;
 
-  // The object are passed as the second parameter
   constructor(factory: Factory, settings: MyRobotSettings) {
     super(factory);
     this.limit = settings.limit;
   }
 
   async execute(): Promise<void> {
-    // ... robot execution code here
+    // Execution logic using this.limit
   }
 }
 
 // In the Factory
 
 Factory.createFlow(state)
-  // Pass the settings as the second parameter
   .pipe(FetchImagesRobot, { limit: 10 })
   .execute();
 
 ```
 
-## Change Robot Log Name
+## Using the Robot
 
-To change the name that appears in the robot's logs, simply call the robot's `this.setName()` method.
+Robots access methods and properties to manage state and generate logs, acting as isolated task units that can be combined to form complex workflows.
+
+### State Interaction
+
+Robots are capable of reading from and updating the state during execution. The state is automatically saved after each robot completes its task to ensure data integrity and workflow continuity.
+
+```ts
+class MyRobot extends Robot {
+  async execute(): Promise<void> {
+    // Accessing and modifying state data
+    const data = this.state.get("key");
+    this.state.set("key", "value");
+    await this.state.save(); // Manual save if necessary
+  }
+}
+```
+
+The `Robot` class's first `Generic` parameter specifies the state type, ensuring type-safe state interactions.
+
+```ts
+class MyRobot extends Robot<MyState> {
+  async execute(): Promise<void> {
+    const data = this.state.get("key"); // Typed state access
+  }
+}
+```
+
+### Factory Interaction
+
+Robots can interact with the `Factory` instance for events and others purposes. The `Factory` instance is automatically provided when the robot is instantiated.
+
+```ts
+class MyRobot extends Robot {
+  async execute(): Promise<void> {
+    // Subscribing to events
+    this.factory.on('finish', () => {
+      console.log('Flow finished');
+    });
+    // Initiating a new flow with same factory
+    // - just be careful to not create a infinite loop
+    await this.factory.createFlow()
+      .pipe(AnotherRobot)
+      .execute();
+  }
+}
+```
+
+Learn more about the `Factory` class [here](/docs/js/core/factory).
+
+### Robot Log Name
+
+To change the name that appears in the robot's logs, simply call the robot's `this.setName()` method sending a string with the new name. (The default name is the robot's class name.)
 
 ```ts
 class MyRobot extends Robot {
   constructor(factory: Factory) {
     super(factory);
-
     this.setName('My Great Robot');
   }
 
   async execute(): Promise<void> {
-    // ... robot execution code here
     this.log.info('Hello World');
   }
 }
 ```
 
-## Making Logs
+
+
+## Logging
 
 
 You can make logs inside the robots, to do this, just call some method of the `log` module injected inside the robot.
@@ -71,7 +139,6 @@ class LogRobot extends Robot {
   }
 }
 ```
-import TerminalImage from '@/components/docs/TerminalImage'
 
 <TerminalImage 
   src="/assets/docs/console-2.png" 
@@ -80,4 +147,4 @@ import TerminalImage from '@/components/docs/TerminalImage'
   alt="Factory Flow Logs"
 />
 
-More information about the log module can be found [here](/docs/js/modules/log).
+For more details on logging, visit the Log Module documentation [here](/docs/js/modules/log).

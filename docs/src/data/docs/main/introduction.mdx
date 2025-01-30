@@ -5,11 +5,11 @@ description: "Welcome to the Factory Flow Documentation."
 
 import TerminalImage from '@/components/docs/TerminalImage'
 
-Imagine a scenario where you need to run a script that goes through a image database, downloads them in a folder, checks their size and optimizes very heavy images.
+Factory Flow is a TypeScript-based library designed to streamline the creation of automated robotic workflows.
 
-Doing this script from the beginning can bring some challenges, such as the time it takes to execute each step of the process, or if an error occurs in the middle, you may need to run it from the beginning again.
+It employs a series of principles inspired by factory production lines, where each station, or `robot`, executes a specific task independently of the preceding or succeeding robots. By focusing on the current state and transforming it to pass along the line, Factory Flow ensures an efficient and organized processing sequence.
 
-
+{/* TODO: Update this image */}
 <TerminalImage 
   src="/assets/docs/console-1.png" 
   width={662}
@@ -19,28 +19,50 @@ Doing this script from the beginning can bring some challenges, such as the time
   className='my-2'
 />
 
-With this in mind, I developed this tool, thinking about two main principles.
-
 ## Principles
 
-### 1. Like a real factory process
+Factory Flow operates on three key principles that guide its functionality and design:
 
-The main idea of this tool is to simulate a `Robot Factory`, each `Robot` has its function, and as much as each `Robot` is one depends on the other, they just have access to the state, and perform their function by changing the state, and then giving way to the next `Robot`.
+### Isolation
 
-The `Robot` have no knowledge of the `Robot` that came before, nor of what came after, They don't communicate with each other.
+Each robot in the workflow is isolated from the others. This means that a robot performs its specific function without needing details about the tasks performed by the robots before or after it. This principle ensures modularity, allowing tasks to be developed and tested independently, reducing complexity and potential errors in the workflow.
 
-<b>For example:</b>
+### Transformation
 
-the `Robot` that fetches the images data from the database, there is no need to have the function of downloading images, or optimizing them, each function will be used by a different `Robot`. The `Robot` that downloads the images only knows that it has a list of URLs in the state, and needs to download the images from that URL, while the one that optimizes, knows that there are images in a folder, and that it needs to optimize the heavy ones.
+Robots operate by taking in the current state, performing their designated task, and transforming it into a new state for the next robot. This method of state transformation ensures that each step in the process builds off the results of the previous one, facilitating seamless data handling throughout the flow.
 
-### 2. Keep the state updated
+### Preservation
 
-The state is the main object of the tool, it is the object that will be passed to each `Robot`, and it is the object that will be updated by each `Robot`.
+The State is automatically saved after each robot completes its task. This means that if there's an error or interruption in the process, the flow can resume from the point it halted, rather than starting over. Automatic state persistence improves reliability and efficiency, ensuring minimal data loss and reduced downtime.
 
-The state needs to be loaded at the beginning, and updated with each update made, each `Robot` has the responsibility to check the state and avoid duplicate work.
+## Features
 
-Keeping the state updated, it is possible to temporarily remove a `Robot` from the process, to focus on developing another.
+Factory Flow provides several features to enhance workflow automation, encouraging robust and reliable process management:
 
-<b>For example:</b>
+- **Configurable Flows**: you can customize the flow by easily adding, removing, or reordering robots to meet specific task requirements.
+- **Logging**: Factory Flow provides detailed logs system, allowing you to monitor the workflow's progress and identify potential issues.
+- **Error Handling**: integrated error-handling guarantees workflows are resilient, with tools for debugging and troubleshooting without disrupting the entire sequence.
+- **Scalability**: designed to handle a variety of tasks, Factory Flow can scale from simple workflows to complex automation sequences, accommodating increased demand.
+- **Extra modules**: Factory Flow provides additional modules to extend its functionality, such as the `Parallel` module, which allows you to run tasks in parallel.
 
-If the `Robot` that downloads the images has already downloaded the image, it will not download them again, it will only download the images that are not in the state.
+
+## Use Cases
+
+Factory Flow's versatility makes it an ideal solution for various applications, such as:
+
+- **Data Processing Pipelines**: Automate and streamline data collection, transformation, and export processes in data engineering workflows.
+- **Web Scraping**: Automate web scraping tasks to extract data from websites and APIs for analysis, reporting, or integration with other systems.
+- **Content Management**: Automate repetitive content management tasks, like formatting and metadata updates, across digital platforms.
+- **Robotic Process Automation (RPA)**: Create RPA workflows to automate repetitive tasks, such as data entry, form filling, and report generation.
+- **Testing Automation**: Develop automated testing workflows to validate software functionality, performance, and security.
+- **Workflow Orchestration**: Coordinate complex workflows across multiple systems and services, ensuring seamless data flow and task execution.
+- **Image Handling**: Efficiently manage workflows involving images, such as batch processing for downloads, resizing, and optimization.
+
+Factory Flow's flexibility and adaptability make it a valuable tool for developers, data scientists, and automation engineers looking to optimize their workflows and increase productivity.
+
+## Getting Started
+
+To begin using Factory Flow, familiarize yourself with its core components and learn how to set up a basic workflow. We'll guide you through the installation process and create a simple example to illustrate the fundamentals.
+
+{/* TODO: Make this a link  */}
+Click here to find out how to install Factory Flow and start building your first workflow.

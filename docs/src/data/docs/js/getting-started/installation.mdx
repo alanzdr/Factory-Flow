@@ -1,27 +1,31 @@
 ---
 title: "Installation"
+description: "Learn how to install Factory Flow in your project."
 ---
 
 ## Automatic installation
 
+{/* TODO: Add Automaic Installation */}
 <i>Coming Soon</i>
 
 ## Manual installation
 
-After starting a new node.js project, install the dependency using your preferred manager.
+To get started with Factory Flow in your Node.js project, first ensure you've initiated your project. Then, install the Factory Flow dependency using your preferred package manager. Choose from the options below:
 
 ```bash
-# Yarn
+# For Yarn users
 yarn add factory-flow
 
-# NPM
+# For NPM users
 npm install factory-flow
 
-# PNPM
+# For PNPM users
 pnpm install factory-flow
 ```
 
-Currently the package only works in "ES modules", so you need to set the `type` field in your `package.json` to `module`.
+### Configuration
+
+Factory Flow is designed to work with ES modules. To enable this, update your package.json by setting the type field to module:
 
 ```json
 {
@@ -29,4 +33,6 @@ Currently the package only works in "ES modules", so you need to set the `type` 
 }
 ```
 
-The library is built to be executed with typescript, is not mandatory but is highly recommended.
+### TypeScript
+
+Although using TypeScript is not mandatory, it is highly recommended to fully leverage the capabilities and type-safety features of Factory Flow. Ensure your development environment is set up for TypeScript to maximize your experience with the library.
