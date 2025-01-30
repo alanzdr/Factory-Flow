@@ -144,10 +144,15 @@ export function getBestMatchPath(match: BestMatchProps) {
     page = category.pages[0];
   }
 
+  if (page.fullPath) {
+    return page.fullPath;
+  }
+
   return `/docs/${language.slug}/${category.slug}/${page.slug}`;
 }
 
 export function redirectToBestMatchPage(match: BestMatchProps) {
   const path = getBestMatchPath(match);
+  console.log(path);
   redirect(path);
 }
