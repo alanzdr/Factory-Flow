@@ -10,9 +10,7 @@ describe("MODULES:LOG", async () => {
     const state = new State();
 
     expect(async () => {
-      await Factory.createFlow(state, "Log Factory")
-        .pipe(ProgressBar)
-        .execute();
+      await Factory.createFlow(state).pipe(ProgressBar).execute();
     }).not.toThrow();
   });
   //

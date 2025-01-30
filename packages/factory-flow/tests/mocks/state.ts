@@ -16,7 +16,7 @@ class MockState extends FactoryState<IMockData> {
   }
 
   public async initialize() {
-    return true;
+    return;
   }
 
   public async save() {
