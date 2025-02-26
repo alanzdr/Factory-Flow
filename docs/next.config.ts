@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
   pageExtensions: ["md", "mdx", "tsx", "ts", "jsx", "js"],
   env: {
     siteUrl: process.env.SITE_URL || "http://localhost:3000",
+    buildTime: new Date().toISOString(),
   },
 
   /* config options here */
