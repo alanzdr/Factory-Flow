@@ -2,17 +2,17 @@
   "siteName": "Factory Flow",
   "author": {
     "name": "Alanderson Zelindro da Rosa",
-    "url": "https://www.instagram.com/alandersonzdr"
+    "url": "https:zelindro.dev"
   },
-  "themeColor": "#b40f20",
+  "themeColor": "#39e991",
   "siteDescription": "",
   "generator": {
     "page": {
-      "title": "%s | Factory Flow",
+      "title": "Factory Flow | %s",
       "description": "%s"
     },
     "docs": {
-      "title": "%s Documentation | Factory Flow",
+      "title": "%s - Factory Flow | Documentation",
       "description": "%s"
     }
   }
