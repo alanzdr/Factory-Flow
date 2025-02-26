@@ -17,15 +17,17 @@
   <img alt="License" src="https://img.shields.io/static/v1?label=license&message=MIT&color=b40f20&labelColor=000000">
 </p>
 
-<br />
-
 ## :tada: Introduction
 
 Factory Flow is a library designed to streamline the creation of automated robotic workflows. It is designed to be simple to use and to scale to any numbers of workflows.
 
+<br />
+
 ## :hammer: Documentation
 
 Visit [factory-flow.zelindro.dev](https://factory-flow.zelindro.dev/) to view the full documentation.
+
+<br />
 
 ## :memo: License
 
