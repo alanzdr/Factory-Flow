@@ -7,19 +7,24 @@ import {
   TryCatchWorkStation,
   LoopWorkStation,
   IfWorkStation,
+  PipelineWorkStation,
 } from "./workstations";
 import { Factory } from "@/core/factory";
 import { FactoryState } from "@/core/state";
 import { ConditionFunction } from "./types";
+import { FactoryPipeline } from "../pipeline";
 
 class FactoryFlow<State extends FactoryState = FactoryState> {
   protected stations: WorkStation[];
+  protected pipelines: string[];
+  protected parent?: FactoryFlow;
 
   constructor(
     protected factory: Factory<State>,
     protected events: EventEmitter
   ) {
     this.stations = [];
+    this.pipelines = [];
   }
 
   /** @EVENTS */
@@ -56,8 +61,7 @@ class FactoryFlow<State extends FactoryState = FactoryState> {
 
   public if(condition: ConditionFunction) {
     const flow = new IfFactoryFlow(
-      this.factory,
-      this.events,
+      this,
       (ifState: IIFFlowState) => {
         this.stations.push(
           IfWorkStation.create(
@@ -74,10 +78,33 @@ class FactoryFlow<State extends FactoryState = FactoryState> {
     return flow;
   }
 
+  public addPipelinesNames(pipelines: string[]) {
+    if (this.parent) {
+      this.parent.addPipelinesNames(pipelines);
+    } else {
+      this.pipelines = [...new Set([...this.pipelines, ...pipelines])];
+    }
+  }
+
+  public describe(pipeline: string | string[]): PipelineFactoryFlow {
+    const pipelineArray = Array.isArray(pipeline) ? pipeline : [pipeline];
+    this.addPipelinesNames(pipelineArray);
+
+    const flow = new PipelineFactoryFlow(
+      this,
+      pipelineArray,
+      (station) => {
+        return this.station(station);
+      }
+    );
+
+    return flow
+  }
+
+
   public do() {
     const flow = new DoWhileFactoryFlow(
-      this.factory,
-      this.events,
+      this,
       (stations, condition) => {
         this.stations.push(
           LoopWorkStation.create(
@@ -95,8 +122,7 @@ class FactoryFlow<State extends FactoryState = FactoryState> {
 
   public try() {
     const flow = new TryCatchFactoryFlow(
-      this.factory,
-      this.events,
+      this,
       (stations, onCatch) => {
         this.stations.push(
           TryCatchWorkStation.create(this.factory, stations, onCatch)
@@ -113,9 +139,34 @@ class FactoryFlow<State extends FactoryState = FactoryState> {
     return this;
   }
 
-  public async execute() {
+  public station(station: WorkStation) {
+    this.stations.push(station);
+    return this;
+  }
+
+  public main() : FactoryFlow {
+    return this.parent?.main() || this;
+  }
+
+  public toPipeline() {
+    return FactoryPipeline.fromFlow(this);
+  }
+
+  public getPipelines() {
+    return this.pipelines;
+  }
+
+  public getFactory() {
+    return this.factory;
+  }
+
+  public getEventsEmitter() {
+    return this.events;
+  }
+
+  public async execute(pipeline?: string) {
     try {
-      await this.factory.executeStations(this.stations);
+      await this.factory.executeStations(this.main().stations, pipeline);
       this.factory.log.processInfo("Factory execution completed");
     } catch (error) {
       this.factory.log.error("Error while running factory");
@@ -125,10 +176,35 @@ class FactoryFlow<State extends FactoryState = FactoryState> {
   }
 }
 
+
 export class SubFactoryFlow extends FactoryFlow {
-  public override async execute() {
-    throw new Error("Sub factory flow cannot be executed");
-    return this.factory;
+  constructor(parent: FactoryFlow) {
+    super(parent.getFactory(), parent.getEventsEmitter());
+    this.parent = parent;
+  }
+}
+
+export class PipelineFactoryFlow extends SubFactoryFlow {
+  constructor(
+    parent: FactoryFlow,
+    private pipelineValues: string[],
+    protected onClose: (station: PipelineWorkStation) => FactoryFlow
+  ) {
+    super(parent);
+  }
+
+  public override describe(pipeline: string | string[]): PipelineFactoryFlow {
+    const parentFlow = this.onClose(PipelineWorkStation.create(this.factory, this.stations, this.pipelineValues));
+    return parentFlow.describe(pipeline);
+  }
+
+  public override main() : FactoryFlow {
+    return this.onClose(PipelineWorkStation.create(this.factory, this.stations, this.pipelineValues));
+  }
+
+  public override async execute(pipeline?: string) {
+    const parentFlow = this.onClose(PipelineWorkStation.create(this.factory, this.stations, this.pipelineValues));
+    return parentFlow.execute(pipeline);
   }
 }
 
@@ -158,35 +234,44 @@ export class IfFlowRobot extends Robot {
 
 export class DoWhileFactoryFlow extends SubFactoryFlow {
   constructor(
-    protected factory: Factory,
-    protected events: EventEmitter,
+    parent: FactoryFlow,
     protected onClose: (
       stations: WorkStation[],
       condition: ConditionFunction
     ) => FactoryFlow
   ) {
-    super(factory, events);
+    super(parent);
   }
 
   while(condition: ConditionFunction) {
     return this.onClose(this.stations, condition);
   }
+
+  override main() {
+    return this.onClose(this.stations, () => true);
+  }
 }
+
 
 export class TryCatchFactoryFlow extends SubFactoryFlow {
   constructor(
-    protected factory: Factory,
-    protected events: EventEmitter,
+    parent: FactoryFlow,
     protected onClose: (
       stations: WorkStation[],
       callback: (error: Error) => Promise<void>
     ) => FactoryFlow
   ) {
-    super(factory, events);
+    super(parent);
   }
 
   catch(callback: (error: Error) => Promise<void>) {
     return this.onClose(this.stations, callback);
+  }
+
+  override main() {
+    return this.onClose(this.stations, async (error) => {
+      this.factory.emit("error", error);
+    });
   }
 }
 
@@ -194,16 +279,16 @@ class IfBaseFactoryFlow extends SubFactoryFlow {
   protected ifState: IIFFlowState;
 
   constructor(
-    protected factory: Factory,
-    protected events: EventEmitter,
+    parent: FactoryFlow,
     protected onClose: (ifState: IIFFlowState) => FactoryFlow,
     ifState?: IIFFlowState
   ) {
-    super(factory, events);
+    super(parent);
     this.ifState = ifState ?? {
       true: [],
       false: [],
     };
+    this.parent = parent;
   }
 }
 
@@ -218,8 +303,7 @@ export class IfFactoryFlow extends IfBaseFactoryFlow {
   else() {
     this.ifState.true = this.stations;
     return new ElseFactoryFlow(
-      this.factory,
-      this.events,
+      this,
       this.onClose,
       this.ifState
     );

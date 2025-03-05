@@ -86,10 +86,7 @@ const initialState: State = {
   downloaded: [],
 };
 
-const __filename = fileURLToPath(import.meta.url);
-const statePath = path.resolve(path.dirname(__filename), "state.json");
-
-const state = new JSONState<State>(initialState, statePath);
+const state = new JSONState<State>(initialState, 'state.json');
 
 export default state;
 ```

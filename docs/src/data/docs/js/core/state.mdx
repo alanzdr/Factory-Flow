@@ -47,23 +47,25 @@ The Factory Flow library offers some predefined state implementations for ease o
 A convenient option for persisting state data within a JSON file located in the project directory, suitable for many applications requiring simple persistence.
 
 ```ts
+// state.ts
 import { JSONState } from "factory-flow/core";
-import type { MyState } from "./types";
 
-const initialState: MyState = {
+interface State {
+  images: string[];
+  downloaded: string[];
+}
+
+const initialState: State = {
   images: [],
   downloaded: [],
 };
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const statePath = path.resolve(__dirname, 'tmp', "state.json");
-
-const state = new JSONState<MyState>(initialState, statePath);
+const state = new JSONState<State>(initialState, 'state.json');
 
 export default state;
 ```
+
+The status will automatically be saved in the tmp folder in the project root, but you can edit the folder path in the `JSONState` constructor to save the state file in a different location, just add the folder location as the third parameter.
 
 ### Memory State
 

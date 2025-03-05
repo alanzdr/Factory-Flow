@@ -1,0 +1,36 @@
+{
+  "name": "factory-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "tsx src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alanzdr/Factory-Flow.git"
+  },
+  "author": {
+    "name": "Alanderson Zelindro da Rosa",
+    "url": "https://github.com/alanzdr"
+  },
+  "maintainers": [
+    {
+      "name": "Alanderson Zelindro da Rosa",
+      "url": "https://github.com/alanzdr"
+    }
+  ],
+  "keywords": [],
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "factory-flow": "link:../packages/factory-flow",
+    "typerscript": "^0.2.3",
+    "unsplash-js": "^7.0.19"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.9",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.2"
+  }
+}

@@ -31,6 +31,10 @@ abstract class Robot<
     return this.factory.state;
   }
 
+  public get pipeline(): string {
+    return this.factory.pipeline
+  }
+
   abstract execute(): Promise<void>;
 
   public async run(): Promise<void> {

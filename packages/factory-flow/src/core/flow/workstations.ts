@@ -42,6 +42,31 @@ export class IfWorkStation extends WorkStation {
   }
 }
 
+export class PipelineWorkStation extends WorkStation {
+  constructor(
+    public robot: MultiStationRobot,
+    private pipelines: string[]
+  ) {
+    super(robot);
+  }
+
+  async run() {
+    const pipeline = this.robot.pipeline
+    if (pipeline === 'main' || this.pipelines.includes(pipeline)) {
+      await this.robot.execute();
+    }
+  }
+
+  public static create(
+    factory: Factory,
+    stations: WorkStation[],
+    pipelines: string | string[]
+  ): PipelineWorkStation {
+    const pipelinesArray = Array.isArray(pipelines) ? pipelines : [pipelines];
+    return new PipelineWorkStation(new MultiStationRobot(factory, stations), pipelinesArray);
+  }
+}
+
 export class TryCatchWorkStation extends WorkStation {
   constructor(
     robot: MultiStationRobot,

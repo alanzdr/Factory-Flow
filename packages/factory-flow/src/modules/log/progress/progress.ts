@@ -25,6 +25,15 @@ class ProgressBar {
     process.stdout.cursorTo(0);
     process.stdout.write(this.draw(progress));
   }
+
+  public finish() {
+    if (this.disabled) return;
+
+    process.stdout.clearLine(0);
+    process.stdout.cursorTo(0);
+    process.stdout.write(this.draw(100));
+    process.stdout.write("\n");
+  }
 }
 
 export default ProgressBar;

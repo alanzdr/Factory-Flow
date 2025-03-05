@@ -11,6 +11,8 @@ class Factory<State extends FactoryState = FactoryState> {
   public log: LogModule;
   public events: EventEmitter;
   public name: string;
+  public pipeline: string
+  
   private isInitialized: boolean;
 
   constructor(public state: State, public configs: IFactoryConfigs = {}) {
@@ -18,6 +20,8 @@ class Factory<State extends FactoryState = FactoryState> {
 
     this.name = configs.name ?? "Factory";
     this.isInitialized = false;
+
+    this.pipeline = "main";
 
     this.log = new LogModule(this.name, configs.log);
     this.log.info("Env:", process.env.NODE_ENV);
@@ -48,8 +52,10 @@ class Factory<State extends FactoryState = FactoryState> {
     this.isInitialized = true;
   }
 
-  public async executeStations(stations: WorkStation[]) {
+  public async executeStations(stations: WorkStation[], pipeline?: string) {
     await this.initialize();
+
+    this.pipeline = pipeline || 'main';
 
     this.emit("start", this);
     this.once("stop", () => {

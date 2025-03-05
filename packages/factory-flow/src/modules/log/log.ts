@@ -83,10 +83,15 @@ class LogModule {
     return new ProgressBar(message, total, this.isAllDisabled);
   }
 
+  public inspect(object: any) {
+    if (this.isDeepDisabled) return;
+    console.log(inspect(object, false, undefined, true));
+  }
+
   public object(object: any) {
     if (this.isDeepDisabled) return;
     this.info("Loggin Object:");
-    console.log(inspect(object, false, undefined, true));
+    this.inspect(object);
   }
 
   public separator() {
