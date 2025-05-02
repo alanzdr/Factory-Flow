@@ -1,65 +1,68 @@
+import { Factory } from "@/core/factory";
+import { Pipe } from "../pipe";
+import { Station } from '@/core/station';
+import EventEmitter from "events";
 
-import { FactoryFlow } from "../flow";
-import PipelineCLI from './cli'
-
-type FlowFunction = () => FactoryFlow;
-
-class FactoryPipeline {
-  private flows: Map<string, FactoryFlow[]>;
+export class Pipeline {
+  protected stations: Station[];
+  protected factoryRef: Factory<any> | null = null;
+  public events: EventEmitter;
 
   constructor() {
-    this.flows = new Map();
+    this.stations = [];
+    this.events = new EventEmitter();
+    this.events.setMaxListeners(100);
   }
 
-  public add(key: string, flow: FlowFunction) : void;
-  public add(key: string, flow: FactoryFlow): void;
-  public add(key: string, flow: FactoryFlow | FlowFunction) : void {
-    const pipelineFlow = typeof flow === "function" ? flow() : flow;
 
-    const existingFlow = this.flows.get(key);
-    if (existingFlow) {
-      existingFlow.push(pipelineFlow);
+  /** @EVENTS */
+
+  public once(eventName: string, callback: (...args: any[]) => void) {
+    this.events.once(eventName, callback.bind(this));
+    return this;
+  }
+
+  public on(eventName: string, callback: (...args: any[]) => void) {
+    this.events.on(eventName, callback.bind(this));
+    return this;
+  }
+
+  public emit(eventName: string, ...args: any[]) {
+    this.events.emit(eventName, ...args);
+  }
+
+  public addStation(station: Station | Station[]) {
+    if (Array.isArray(station)) {
+      this.stations.push(...station);
       return;
     }
-
-    this.flows.set(key, [pipelineFlow]);
+    this.stations.push(station);
   }
 
-  async execute(key: string) {
-    const flow = this.flows.get(key);
-    if (!flow) {
-      throw new Error(`Flow with key ${key} not found`);
+  public getStations() {
+    return this.stations;
+  }
+
+  public setFactory(factory: Factory<any>) {
+    this.factoryRef = factory;
+  }
+
+
+  public get factory() {
+    if (!this.factoryRef) {
+      throw new Error("Pipeline not initialized with factory");
     }
-
-    for (const f of flow) {
-      await f.execute(key);
-    }
+    return this.factoryRef;
   }
 
-  public createCLI() {
-    return new PipelineCLI(this);
+  public createFlow() {
+    this.stations = []
+    const initialPipe = new Pipe(this);
+    return initialPipe;
   }
 
-  public getFlows() {
-    return this.flows;
-  }
-
-  static fromFlow(
-    flow: FactoryFlow
-  ): FactoryPipeline {
-    const pipeline = new FactoryPipeline();
-    const main = flow.main()
-
-    pipeline.add("main", main);
-
-    const keys = main.getPipelines()
-
-    for (const key of keys) {
-      pipeline.add(key, main);
-    }
-
-    return pipeline;
+  static createFlow() {
+    const pipeline = new Pipeline();
+    return pipeline.createFlow();
   }
 }
-
-export default FactoryPipeline;

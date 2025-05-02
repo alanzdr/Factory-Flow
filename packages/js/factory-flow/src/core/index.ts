@@ -1,3 +1,4 @@
+export * from "./pipe";
 export * from "./factory";
 export * from "./state";
 export * from "./robot";

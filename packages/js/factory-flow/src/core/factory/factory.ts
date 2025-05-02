@@ -1,78 +1,49 @@
 import { LogModule } from "@/modules/log";
-import EventEmitter from "node:events";
 
 import { FactoryState } from "@/core/state";
-import { FactoryFlow, WorkStation } from "@/core/flow";
+import { Pipeline } from "@/core/pipeline";
+import { Station } from "@/core/station";
 import { IFactoryConfigs } from "./types";
 
-const EXECUTION_STOPPED = "EXECUTION_STOPPED";
+export const EXECUTION_STOPPED = "EXECUTION_STOPPED";
 
-class Factory<State extends FactoryState = FactoryState> {
+class Factory<State extends FactoryState = any> {
   public log: LogModule;
-  public events: EventEmitter;
   public name: string;
-  public pipeline: string
-  
-  private isInitialized: boolean;
+  public pipelines: Map<string, Pipeline>;
 
   constructor(public state: State, public configs: IFactoryConfigs = {}) {
-    this.events = new EventEmitter();
-
-    this.name = configs.name ?? "Factory";
-    this.isInitialized = false;
-
-    this.pipeline = "main";
+    this.name = configs.name || "Factory";
 
     this.log = new LogModule(this.name, configs.log);
     this.log.info("Env:", process.env.NODE_ENV);
     this.log.info("State:", state.constructor.name);
+
+    this.pipelines = new Map();
   }
 
-  /** @EVENTS */
-
-  public once(eventName: string, callback: (...args: any[]) => void) {
-    this.events.once(eventName, callback.bind(this));
-    return this;
-  }
-
-  public on(eventName: string, callback: (...args: any[]) => void) {
-    this.events.on(eventName, callback.bind(this));
-    return this;
-  }
-
-  public emit(eventName: string, ...args: any[]) {
-    this.events.emit(eventName, ...args);
+  public async add(key: string, pipeline: Pipeline) {
+    this.pipelines.set(key, pipeline);
   }
 
   /** @EXECUTE */
 
-  public async initialize() {
-    if (this.isInitialized) return;
-    await this.state.initialize();
-    this.isInitialized = true;
-  }
-
-  public async executeStations(stations: WorkStation[], pipeline?: string) {
-    await this.initialize();
-
-    this.pipeline = pipeline || 'main';
-
-    this.emit("start", this);
-    this.once("stop", () => {
-      throw new Error(EXECUTION_STOPPED);
-    });
-
+  private async executeStations(stations: Station[]) {
     this.log.processInfo("Starting Factory");
     this.log.separator();
 
     for (let i = 0; i < stations.length; i++) {
       const station = stations[i];
       try {
+        // Run the station
         await station.run();
+        // Save all state used
         await this.state.save();
+        // Clean all excess state for memory safety
+        this.state.cleanExcess()
+        //
         this.log.separator();
       } catch (error) {
-        this.emit("error", error);
         if ((error as Error).message === EXECUTION_STOPPED) {
           this.log.processInfo("User finished the factory");
           break;
@@ -80,22 +51,23 @@ class Factory<State extends FactoryState = FactoryState> {
         throw error;
       }
     }
-
-    this.emit("finish", this);
   }
 
-  public createFlow() {
-    const flow = new FactoryFlow(this, this.events);
-    return flow;
-  }
+  async execute(pipeline: Pipeline): Promise<void>
+  async execute(pipeline: string): Promise<void>
+  async execute(pipeline: string | Pipeline): Promise<void> {
+    if (typeof pipeline === "string") {
+      const pipelineRef = this.pipelines.get(pipeline);
+      if (!pipelineRef) {
+        throw new Error(`Pipeline ${pipeline} not found`);
+      }
+      pipeline = pipelineRef;
+    }
 
-  static createFlow<State extends object>(
-    state: FactoryState<State>,
-    configs?: IFactoryConfigs
-  ): FactoryFlow<FactoryState<State>> {
-    const factory = new Factory(state, configs);
-    const flow = new FactoryFlow(factory, factory.events);
-    return flow;
+    pipeline.setFactory(this);
+
+    const stations = pipeline.getStations();
+    await this.executeStations(stations);
   }
 }
 

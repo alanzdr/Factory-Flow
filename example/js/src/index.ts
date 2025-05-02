@@ -1,10 +1,20 @@
 import * as dotenv from "dotenv";
-
-import { createPipeline } from './pipelines'
-
 dotenv.config();
 
-const pipeline = createPipeline()
-const cli = pipeline.createCLI()
+import { createPipeline } from './pipelines'
+import { state } from './state'
+import { Factory, JSONState } from "factory-flow/core"
+import { State } from "./types";
 
-cli.run(process.argv)
+const pipeline = createPipeline()
+const factory = new Factory(state)
+
+factory.add("save-images", pipeline)
+
+async function main() {
+  await factory.execute(pipeline)
+}
+
+void main()
+// const cli = pipeline.createCLI()
+

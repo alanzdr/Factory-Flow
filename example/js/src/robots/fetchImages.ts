@@ -5,13 +5,17 @@ import { IImageData, RobotState } from "@/types";
 
 const IMAGE_PER_PAGE = 10;
 
-class FetchImagesRobot extends Robot<RobotState> {
+class FetchImagesRobot extends Robot<any> {
   private unsplashService = new UnsplashService();
 
-  async execute(): Promise<void> {
-    const count = this.state.get("count");
-    const imagesRecord = this.state.get("images");
-    const page = this.state.get("nextPage");
+  public async initialize(max: number): Promise<void> {
+    
+  }
+
+  public async execute(): Promise<void> {
+    const count = await this.state.get("count");
+    const imagesRecord = await this.state.get("images");
+    const page = await this.state.get("nextPage");
     
     const imagesLoaded = await this.unsplashService.listPage(page, IMAGE_PER_PAGE);
     

@@ -24,7 +24,7 @@
   "keywords": [],
   "dependencies": {
     "dotenv": "^16.4.7",
-    "factory-flow": "link:../packages/factory-flow",
+    "factory-flow": "link:../../packages/js/factory-flow",
     "typerscript": "^0.2.3",
     "unsplash-js": "^7.0.19"
   },

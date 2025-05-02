@@ -1,4 +1,4 @@
-import { JSONState } from "factory-flow/core";
+import { FactoryState, JSONState } from "factory-flow/core";
 import { State } from "./types";
 
 const initialState: State = {
@@ -7,6 +7,6 @@ const initialState: State = {
   nextPage: 1,
 };
 
-const state = new JSONState<State>(initialState, 'state.json');
+export const state = new JSONState(initialState, 'state');
 
 export default state;

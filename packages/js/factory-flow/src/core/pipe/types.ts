@@ -1,5 +1,5 @@
 import { Factory } from "@/core";
 
 export type ConditionFunction =
-  | ((factory: Factory) => Promise<boolean> | boolean)
+  | ((factory: Factory<any>) => Promise<boolean> | boolean)
   | boolean;

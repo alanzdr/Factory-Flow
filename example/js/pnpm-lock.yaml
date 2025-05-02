@@ -12,8 +12,8 @@ importers:
         specifier: ^16.4.7
         version: 16.4.7
       factory-flow:
-        specifier: link:../packages/factory-flow
-        version: link:../packages/factory-flow
+        specifier: link:../../packages/js/factory-flow
+        version: link:../../packages/js/factory-flow
       typerscript:
         specifier: ^0.2.3
         version: 0.2.3(typestyle@1.5.1)

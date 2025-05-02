@@ -17,6 +17,7 @@ class UnsplashService {
       perPage,
     })
 
+
     if (!response) {
       throw new Error('Failed to fetch images from Unsplash')
     }

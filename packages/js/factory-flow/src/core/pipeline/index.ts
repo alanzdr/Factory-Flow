@@ -1,1 +1,1 @@
-export { default as FactoryPipeline } from "./pipeline";
+export { Pipeline } from "./pipeline";
